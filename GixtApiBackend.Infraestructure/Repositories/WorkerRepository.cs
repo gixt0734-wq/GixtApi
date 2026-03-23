@@ -243,7 +243,7 @@ namespace GixtApi.Infrastructure.Repositories
                     latitude = dto.latitude,
                     longitude = dto.longitude,
                     range_km = dto.range_km,
-                    labor_cost = dto.labor_cost,
+                    km_cost = dto.km_cost,
 
                 };
 

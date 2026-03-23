@@ -15,6 +15,8 @@ using GixtApiBackend.Application.UseCases.Advertisements;
 using GixtApiBackend.Infraestructure;
 using GixtApiBackend.Application.UseCases.Categories;
 using GixtApiBackend.Infrastructure.Repositories;
+using GixtApiBackend.Application.UseCases.Services;
+using GixtApiBackend.Application.UseCases.Favorites;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -76,6 +78,8 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IWorkerRepository, WorkerRepository>();
 builder.Services.AddScoped<IAdvertisementRepository, AdvertisementRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
+builder.Services.AddScoped<IFavoriteRepository, FavoriteRepository>();
 
 // =======================================================
 // ?? USE CASES - USERS
@@ -114,6 +118,26 @@ builder.Services.AddScoped<CreateCategory>();
 builder.Services.AddScoped<GetCategory>();
 builder.Services.AddScoped<UpdateCategory>();
 builder.Services.AddScoped<DeleteCategory>();
+
+// =======================================================
+// ?? USE CASES - Services
+// =======================================================
+builder.Services.AddScoped<CreateService>();
+builder.Services.AddScoped<GetService>();
+builder.Services.AddScoped<UpdateService>();
+builder.Services.AddScoped<DeleteService>();
+builder.Services.AddScoped<GetServiceById>();
+builder.Services.AddScoped<GetServiceByIdWorker>();
+builder.Services.AddScoped<GetServiceByCategory>();
+
+// =======================================================
+// ?? USE CASES - Services Favorites
+// =======================================================
+builder.Services.AddScoped<CreateFavorite>();
+builder.Services.AddScoped<GetFavorite>();
+builder.Services.AddScoped<UpdateFavorite>();
+builder.Services.AddScoped<DeleteFavorite>();
+builder.Services.AddScoped<GetFavoriteById>();
 
 // =======================================================
 // ?? JWT

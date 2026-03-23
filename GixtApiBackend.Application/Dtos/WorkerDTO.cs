@@ -19,7 +19,7 @@ namespace GixtApiBackend.Application.DTos
         public string city { get; set; }
         public decimal latitude { get; set; }
         public decimal longitude { get; set; }
-        public decimal labor_cost { get; set; }
+        public decimal km_cost { get; set; }
         public double range_km { get;set;}
         
 

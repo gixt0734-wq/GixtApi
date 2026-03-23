@@ -17,6 +17,9 @@ namespace GixtApiBackend.Infrastructure
         public DbSet<Session> sessions { get; set; } = null!;
         public DbSet<Advertisement> advertisements { get; set; } = null!;
         public DbSet<Category> categories { get; set; } = null!;
+        public DbSet<Service> services { get; set; } = null!;
+        public DbSet<Service_image> serviceimages { get; set; } = null!;
+        public DbSet<Favorite> favorites { get; set; } = null!;
 
     }
 
