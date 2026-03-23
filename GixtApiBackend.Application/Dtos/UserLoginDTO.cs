@@ -10,5 +10,8 @@ namespace GixtApiBackend.Application.DTos
     {
         public string Email { get; set; }
         public string Password { get; set; }
+        public string? DeviceId { get; set; }      // ID único del teléfono
+        public string? DeviceName { get; set; }    // Nombre del dispositivo
+        public string? TokenFcm { get; set; }      // Token push notifications
     }
 }

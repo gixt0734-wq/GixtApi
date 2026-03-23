@@ -7,15 +7,18 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Microsoft.Extensions.DependencyInjection;
+using GixtApiBackend.Application.Interfaces;
+using GixtApiBackend.Application.UseCases.Users;
+using GixtApiBackend.Application.UseCases.Users;
+using GixtApiBackend.Application.UseCases.Workers;
+using GixtApi.Infrastructure.Repositories;
+using GixtApi.Infraestructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 builder.Services.AddSwaggerGen(options =>
 {
-
-
-    //// 🔥 JWT CONFIG
+    //// JWT CONFIG
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Name = "Authorization",
@@ -25,7 +28,6 @@ builder.Services.AddSwaggerGen(options =>
         In = ParameterLocation.Header,
         Description = "Ingresa el token así: Bearer {tu token}"
     });
-
 
     options.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
@@ -42,6 +44,7 @@ builder.Services.AddSwaggerGen(options =>
         }
     });
 });
+
 // =======================================================
 // ?? CONEXIÓN A POSTGRESQL
 // =======================================================
@@ -59,7 +62,37 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ImageService>();
 
+
+// =======================================================
+// ?? REPOSITORIOS
+// =======================================================
+
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IWorkerRepository, WorkerRepository>();
+builder.Services.AddScoped<EmailService>();
+
+// =======================================================
+// ?? USE CASES - USERS
+// =======================================================
+builder.Services.AddScoped<CreateUser>();
+builder.Services.AddScoped<GetUser>();
+builder.Services.AddScoped<UpdateUser>();
+builder.Services.AddScoped<DeleteUser>();
+builder.Services.AddScoped<GetUserById>();
+builder.Services.AddScoped<VerficationEmail>();
+
+// =======================================================
+// ?? USE CASES - WORKERS
+// =======================================================
+builder.Services.AddScoped<CreateWorker>();
+builder.Services.AddScoped<CreateInfoWorker>();
+builder.Services.AddScoped<GetWorkers>();
+builder.Services.AddScoped<UpdateWorker>();
+builder.Services.AddScoped<DeleteWorker>();
+builder.Services.AddScoped<GetWorkerById>();
+builder.Services.AddScoped<GetInfoWorkerById>();
 
 
 // =======================================================

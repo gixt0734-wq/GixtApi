@@ -13,7 +13,9 @@ namespace GixtApiBackend.Infrastructure
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
         public DbSet<User> users { get; set; } = null!;
+        public DbSet<Worker> workers { get; set; } = null!;
+        public DbSet<Session> sessions { get; set; } = null!;
 
-        }
+    }
 
 }

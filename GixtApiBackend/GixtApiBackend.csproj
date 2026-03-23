@@ -23,10 +23,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\GixtApiBackend.Application\GixtApiBackend.Application.csproj" />
     <ProjectReference Include="..\GixtApiBackend.Infraestructure\GixtApiBackend.Infraestructure.csproj" />
   </ItemGroup>
