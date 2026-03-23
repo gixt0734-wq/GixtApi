@@ -6,7 +6,7 @@ using GixtApiBackend.Infrastructure;
 using GixtApiBackend.Application.Interfaces;
 using GixtApiBackend.Application.DTos;
 using GixtApiBackend.Domain.Entities;
-using GixtApi.Infraestructure;
+using GixtApiBackend.Infraestructure;
 
 
 namespace GixtApi.Infrastructure.Repositories

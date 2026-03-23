@@ -15,6 +15,7 @@ namespace GixtApiBackend.Infrastructure
         public DbSet<User> users { get; set; } = null!;
         public DbSet<Worker> workers { get; set; } = null!;
         public DbSet<Session> sessions { get; set; } = null!;
+        public DbSet<Advertisement> advertisements { get; set; } = null!;
 
     }
 

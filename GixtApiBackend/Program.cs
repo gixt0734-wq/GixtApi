@@ -9,10 +9,10 @@ using Microsoft.OpenApi.Models;
 using Microsoft.Extensions.DependencyInjection;
 using GixtApiBackend.Application.Interfaces;
 using GixtApiBackend.Application.UseCases.Users;
-using GixtApiBackend.Application.UseCases.Users;
 using GixtApiBackend.Application.UseCases.Workers;
 using GixtApi.Infrastructure.Repositories;
-using GixtApi.Infraestructure;
+using GixtApiBackend.Application.UseCases.Advertisements;
+using GixtApiBackend.Infraestructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -63,6 +63,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ImageService>();
+builder.Services.AddScoped<EmailService>();
 
 
 // =======================================================
@@ -71,7 +72,7 @@ builder.Services.AddScoped<ImageService>();
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IWorkerRepository, WorkerRepository>();
-builder.Services.AddScoped<EmailService>();
+builder.Services.AddScoped<IAdvertisementRepository, AdvertisementRepository>();
 
 // =======================================================
 // ?? USE CASES - USERS
@@ -94,6 +95,13 @@ builder.Services.AddScoped<DeleteWorker>();
 builder.Services.AddScoped<GetWorkerById>();
 builder.Services.AddScoped<GetInfoWorkerById>();
 
+// =======================================================
+// ?? USE CASES - Advertisement
+// =======================================================
+builder.Services.AddScoped<CreateAdvertisement>();
+builder.Services.AddScoped<GetAdvertisement>();
+builder.Services.AddScoped<UpdateAdvertisement>();
+builder.Services.AddScoped<DeleteAdvertisement>();
 
 // =======================================================
 // ?? JWT

@@ -3,7 +3,7 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
 using SixLabors.ImageSharp.Formats.Webp;
 
-namespace GixtApi.Infraestructure
+namespace GixtApiBackend.Infraestructure
 {
     public class ImageService
     {

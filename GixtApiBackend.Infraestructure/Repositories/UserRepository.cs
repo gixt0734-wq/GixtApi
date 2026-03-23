@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System.IO;
 using GixtApiBackend.Infrastructure;
 using GixtApiBackend.Domain.Entities;
-using GixtApi.Infraestructure;
+using GixtApiBackend.Infraestructure;
 using GixtApiBackend.Application.Interfaces;
 using Microsoft.AspNetCore.Http;
 using GixtApiBackend.Application.DTos;
