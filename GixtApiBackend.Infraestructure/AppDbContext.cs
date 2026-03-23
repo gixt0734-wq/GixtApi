@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GixtApiBackend.Application.Entities;
 using GixtApiBackend.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,6 +21,7 @@ namespace GixtApiBackend.Infrastructure
         public DbSet<Service> services { get; set; } = null!;
         public DbSet<Service_image> serviceimages { get; set; } = null!;
         public DbSet<Favorite> favorites { get; set; } = null!;
+        public DbSet<Location> locations { get; set; } = null!;
 
     }
 

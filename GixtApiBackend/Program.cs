@@ -17,6 +17,7 @@ using GixtApiBackend.Application.UseCases.Categories;
 using GixtApiBackend.Infrastructure.Repositories;
 using GixtApiBackend.Application.UseCases.Services;
 using GixtApiBackend.Application.UseCases.Favorites;
+using GixtApiBackend.Application.UseCases.Locations;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -80,6 +81,7 @@ builder.Services.AddScoped<IAdvertisementRepository, AdvertisementRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
 builder.Services.AddScoped<IFavoriteRepository, FavoriteRepository>();
+builder.Services.AddScoped<ILocationRepository, LocationRepository>();
 
 // =======================================================
 // ?? USE CASES - USERS
@@ -110,7 +112,6 @@ builder.Services.AddScoped<GetAdvertisement>();
 builder.Services.AddScoped<UpdateAdvertisement>();
 builder.Services.AddScoped<DeleteAdvertisement>();
 
-
 // =======================================================
 // ?? USE CASES - CATEGORY
 // =======================================================
@@ -138,6 +139,16 @@ builder.Services.AddScoped<GetFavorite>();
 builder.Services.AddScoped<UpdateFavorite>();
 builder.Services.AddScoped<DeleteFavorite>();
 builder.Services.AddScoped<GetFavoriteById>();
+
+// =======================================================
+// ?? USE CASES - LOCATION 
+// =======================================================
+builder.Services.AddScoped<CreateLocation>();
+builder.Services.AddScoped<GetLocation>();
+builder.Services.AddScoped<UpdateLocation>();
+builder.Services.AddScoped<DeleteLocation>();
+builder.Services.AddScoped<GetLocationById>();
+builder.Services.AddScoped<GetLocationByUserId>();
 
 // =======================================================
 // ?? JWT
