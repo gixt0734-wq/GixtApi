@@ -18,6 +18,7 @@ using GixtApiBackend.Infrastructure.Repositories;
 using GixtApiBackend.Application.UseCases.Services;
 using GixtApiBackend.Application.UseCases.Favorites;
 using GixtApiBackend.Application.UseCases.Locations;
+using GixtApiBackend.Application.UseCases.Expresss;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -69,7 +70,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ImageService>();
 builder.Services.AddScoped<EmailService>();
-
+builder.Services.AddScoped<FcmService>();
 
 // =======================================================
 // ?? REPOSITORIOS
@@ -82,6 +83,7 @@ builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
 builder.Services.AddScoped<IFavoriteRepository, FavoriteRepository>();
 builder.Services.AddScoped<ILocationRepository, LocationRepository>();
+builder.Services.AddScoped<IExpressRepository, ExpressRepository>();
 
 // =======================================================
 // ?? USE CASES - USERS
@@ -149,6 +151,22 @@ builder.Services.AddScoped<UpdateLocation>();
 builder.Services.AddScoped<DeleteLocation>();
 builder.Services.AddScoped<GetLocationById>();
 builder.Services.AddScoped<GetLocationByUserId>();
+
+// =======================================================
+// ?? USE CASES - Express
+// =======================================================
+builder.Services.AddScoped<CreateExpress>();
+builder.Services.AddScoped<UpdateExpressStatus>();
+builder.Services.AddScoped<GetExpress>();
+builder.Services.AddScoped<CancelExpress>();
+builder.Services.AddScoped<DeleteExpress>();
+builder.Services.AddScoped<SendAccept>();
+builder.Services.AddScoped<AcceptExpress>();
+builder.Services.AddScoped<GetExpressReviewById>();
+builder.Services.AddScoped<GetExpressById>();
+//builder.Services.AddScoped<GetExpressByUserId>();
+builder.Services.AddScoped<GetExpressByWorkerId>();
+//builder.Services.AddScoped<GetExpressWorkerById>();
 
 // =======================================================
 // ?? JWT

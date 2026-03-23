@@ -22,6 +22,7 @@ namespace GixtApiBackend.Infrastructure
         public DbSet<Service_image> serviceimages { get; set; } = null!;
         public DbSet<Favorite> favorites { get; set; } = null!;
         public DbSet<Location> locations { get; set; } = null!;
+        public DbSet<Express> express { get; set; } = null!;
 
     }
 
