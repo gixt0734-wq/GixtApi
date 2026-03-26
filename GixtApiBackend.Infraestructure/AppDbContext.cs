@@ -23,6 +23,7 @@ namespace GixtApiBackend.Infrastructure
         public DbSet<Favorite> favorites { get; set; } = null!;
         public DbSet<Location> locations { get; set; } = null!;
         public DbSet<Express> express { get; set; } = null!;
+        public DbSet<Job> jobs { get; set; } = null!;
 
     }
 

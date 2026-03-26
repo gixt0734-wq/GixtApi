@@ -19,6 +19,7 @@ using GixtApiBackend.Application.UseCases.Services;
 using GixtApiBackend.Application.UseCases.Favorites;
 using GixtApiBackend.Application.UseCases.Locations;
 using GixtApiBackend.Application.UseCases.Expresss;
+using GixtApiBackend.Application.UseCases.Jobs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -84,6 +85,7 @@ builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
 builder.Services.AddScoped<IFavoriteRepository, FavoriteRepository>();
 builder.Services.AddScoped<ILocationRepository, LocationRepository>();
 builder.Services.AddScoped<IExpressRepository, ExpressRepository>();
+builder.Services.AddScoped<IJobRepository, JobRepository>();
 
 // =======================================================
 // ?? USE CASES - USERS
@@ -169,6 +171,19 @@ builder.Services.AddScoped<GetExpressByWorkerId>();
 //builder.Services.AddScoped<GetExpressWorkerById>();
 
 // =======================================================
+// ?? USE CASES - Jobs
+// =======================================================
+builder.Services.AddScoped<CreateJob>();
+builder.Services.AddScoped<UpdateJobStatus>();
+builder.Services.AddScoped<GetJob>();
+builder.Services.AddScoped<DeleteJob>();
+builder.Services.AddScoped<CancelJob>();
+builder.Services.AddScoped<GetJobById>();
+builder.Services.AddScoped<GetJobByUserId>();
+builder.Services.AddScoped<GetJobByWorkerId>();
+builder.Services.AddScoped<GetJobWorkerById>();
+
+// =======================================================
 // ?? JWT
 // =======================================================
 builder.Services.AddScoped<TokenService>();
@@ -226,6 +241,21 @@ builder.Services.AddCors(options =>
             .AllowAnyMethod()
             .AllowCredentials();
     });
+});
+
+// =======================================================
+// ?? Firebase
+// =======================================================
+
+var firebasePath = Path.Combine(
+    builder.Environment.ContentRootPath,
+    "Firebase",
+    "gixt-bcfdc-firebase-adminsdk-fbsvc-dbc0faaa5e.json"
+);
+
+FirebaseApp.Create(new AppOptions()
+{
+    Credential = GoogleCredential.FromFile(firebasePath)
 });
 
 
