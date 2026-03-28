@@ -130,6 +130,8 @@ namespace GixtApiBackend.Infrastructure.Repositories
                             u.username,
                             w.rating,
                             w.description,
+                            w.city,
+                            w.km_cost,
                             Image = string.IsNullOrEmpty(u.image_url)
                                 ? null
                                 : baseUrl + u.image_url
@@ -161,6 +163,8 @@ namespace GixtApiBackend.Infrastructure.Repositories
                             s.service_id,
                             s.service_name,
                             s.description,
+                            s.labor_price,
+                            s.duration_hours,
                             Image = string.IsNullOrEmpty(s.image_url)
                                 ? null
                                 : baseUrl + s.image_url

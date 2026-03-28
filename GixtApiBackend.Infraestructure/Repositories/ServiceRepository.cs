@@ -200,6 +200,7 @@ namespace GixtApi.Infrastructure.Repositories
                     s.labor_price,
                     s.rating,
                     s.description,
+                    s.duration_hours,
 
                     Worker = (
                         from w in _context.workers
@@ -215,6 +216,7 @@ namespace GixtApi.Infrastructure.Repositories
                             w.description,
                             w.city,
                             w.rating,
+                            w.km_cost,
                             Image = string.IsNullOrEmpty(u.image_url)
                                 ? null
                                 : baseUrl + u.image_url
