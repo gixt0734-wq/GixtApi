@@ -57,7 +57,7 @@ namespace GixtApiBackend.Controllers
                 var locations = await _getLocations.Execute();
                 return Ok(locations);
             }
-            catch (Exception ex)
+            catch (Exception ex)when
             {
                 return BadRequest(new { message = ex.Message });
             }
@@ -103,7 +103,7 @@ namespace GixtApiBackend.Controllers
                 await _deleteLocation.Execute(id);
                 return Ok(new { message = "Location deleted successfully" });
             }
-            catch (InvalidOperationException ex)
+            catch (Exception ex)
             {
                 return BadRequest(new { message = ex.Message });
             }
