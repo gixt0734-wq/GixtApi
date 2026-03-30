@@ -68,6 +68,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddSignalR();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ImageService>();
 builder.Services.AddScoped<EmailService>();
@@ -276,7 +277,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-
+app.MapHub<GpsHub>("/gpsHub");
 // =======================================================
 // ?? SWAGGER
 // =======================================================
