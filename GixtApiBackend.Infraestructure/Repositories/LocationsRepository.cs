@@ -36,6 +36,7 @@ namespace GixtApiBackend.Infrastructure.Repositories
                 maps_address = dto.maps_address,
                 latitude = dto.latitude,
                 longitude = dto.longitude,
+                country = dto.country,
             };
 
             location.is_active = true;

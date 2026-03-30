@@ -19,6 +19,7 @@ namespace GixtApiBackend.Application.DTos
         public string house_number { get; set; }
         public string state { get; set; }
         public string city  { get; set; }
+        public string country { get; set; }
         public string reference { get; set; }
         public IFormFile image { get; set; }
         public string maps_address { get; set; }
