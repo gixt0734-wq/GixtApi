@@ -57,7 +57,7 @@ namespace GixtApiBackend.Controllers
                 var locations = await _getLocations.Execute();
                 return Ok(locations);
             }
-            catch (Exception ex)when
+            catch (Exception ex)
             {
                 return BadRequest(new { message = ex.Message });
             }
