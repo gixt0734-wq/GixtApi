@@ -65,8 +65,35 @@ namespace GixtApiBackend.Infrastructure.Repositories
         public async Task DeleteLocationAsync(Guid id)
         {
             var location = await _context.locations.FindAsync(id);
-            if (location != null)
+            if (location == null)
+                throw new Exception("Location not found ");
+            var existing = _context.jobs
+                        .Any(j =>
+                            j.location_id == id
+                        );
+            if (existing == true)
             {
+                location.is_active = false;
+                await _context.SaveChangesAsync();
+               
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(location.image_url))
+                {
+                    var imagePath = location.image_url.TrimStart('/');
+
+                    var path = Path.Combine(
+                        Directory.GetCurrentDirectory(),
+                        "wwwroot",
+                        imagePath
+                    );
+
+                    if (File.Exists(path))
+                    {
+                        File.Delete(path);
+                    }
+                }
                 _context.locations.Remove(location);
                 await _context.SaveChangesAsync();
             }
