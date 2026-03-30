@@ -57,7 +57,7 @@ namespace GixtApiBackend.Controllers
                 var locations = await _getLocations.Execute();
                 return Ok(locations);
             }
-            catch (InvalidOperationException ex)
+            catch (Exception ex)
             {
                 return BadRequest(new { message = ex.Message });
             }
@@ -98,8 +98,17 @@ namespace GixtApiBackend.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            await _deleteLocation.Execute(id);
-            return Ok(new { message = "Location deleted successfully" });
+            try
+            {
+                await _deleteLocation.Execute(id);
+                return Ok(new { message = "Location deleted successfully" });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+           
+
         }
     }
 
