@@ -222,6 +222,14 @@ namespace GixtApiBackend.Infrastructure.Repositories
                                 : baseUrl + u.image_url
                         }
                     ).FirstOrDefault(),
+                    km_cost = (
+                        from s in _context.services
+                        join w in _context.workers on s.worker_id equals w.worker_id
+                        join u in _context.users on w.user_id equals u.user_id
+                        where s.service_id == t.service_id
+                        select w.km_cost
+                        
+                    ).FirstOrDefault(),
 
                     location = _context.locations
                         .Where(l => l.location_id == t.location_id)
@@ -371,6 +379,7 @@ namespace GixtApiBackend.Infrastructure.Repositories
                                 : baseUrl + s.image_url
                         }
                     ).FirstOrDefault(),
+                    
                     location = _context.locations
                         .Where(l => l.location_id == t.location_id)
                         .Select(l => new
