@@ -365,7 +365,7 @@ namespace GixtApi.Infrastructure.Repositories
                 existing.km_cost = dto.km_cost;
 
             if (dto.range_km != null)
-                existing.range_km = dto.km_cost;
+                existing.range_km = dto.range_km;
 
             if (!string.IsNullOrWhiteSpace(dto.city))
                 existing.city = dto.city;
