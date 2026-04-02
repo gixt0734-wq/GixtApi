@@ -415,6 +415,9 @@ namespace GixtApi.Infrastructure.Repositories
                     w.description,
                     w.latitude,
                     w.longitude,
+                    w.km_cost,
+                    w.city,
+                    w.range_km
 
                 }
             ).FirstOrDefaultAsync();
