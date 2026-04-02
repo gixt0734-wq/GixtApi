@@ -244,6 +244,7 @@ namespace GixtApi.Infrastructure.Repositories
                     longitude = dto.longitude,
                     range_km = dto.range_km,
                     km_cost = dto.km_cost,
+                   
 
                 };
 
@@ -359,6 +360,15 @@ namespace GixtApi.Infrastructure.Repositories
 
             if (dto.longitude != null)
                 existing.longitude = dto.longitude;
+
+            if (dto.km_cost != null)
+                existing.km_cost = dto.km_cost;
+
+            if (dto.range_km != null)
+                existing.range_km = dto.km_cost;
+
+            if (!string.IsNullOrWhiteSpace(dto.city))
+                existing.city = dto.city;
 
             await _context.SaveChangesAsync();
         }
