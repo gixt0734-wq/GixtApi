@@ -24,7 +24,9 @@ namespace GixtApiBackend.Infrastructure
         public DbSet<Location> locations { get; set; } = null!;
         public DbSet<Express> express { get; set; } = null!;
         public DbSet<Job> jobs { get; set; } = null!;
-
+        public DbSet<Costs> costs { get; set; } = null!;
+        public DbSet<Materials> materials { get; set; } = null!;
+        public DbSet<Evidence> evidence { get; set; } = null!;
     }
 
 }

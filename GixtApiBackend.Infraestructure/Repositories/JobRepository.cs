@@ -170,6 +170,22 @@ namespace GixtApiBackend.Infrastructure.Repositories
                                 : baseUrl + s.image_url
                         }).FirstOrDefault(),
 
+                    price = _context.costs
+                        .Where(c => c.job_id == t.job_id)
+                        .Select(c => new
+                        {
+                           c.materials,
+                           c.labor_cost,
+                           c.km_cost,
+                           c.iva,
+                           c.total
+                        }).FirstOrDefault(),
+
+                    Evidence = _context.evidence
+                        .Where(e => e.job_id == t.job_id)
+                        .Select(e => baseUrl + e.image_url)
+                        .ToList(),
+
                     t.job_date,
                     t.job_time,
                     t.description,
@@ -260,6 +276,21 @@ namespace GixtApiBackend.Infrastructure.Repositories
                                 ? null
                                 : baseUrl + s.image_url
                         }).FirstOrDefault(),
+                    price = _context.costs
+                        .Where(c => c.job_id == t.job_id)
+                        .Select(c => new
+                        {
+                            c.materials,
+                            c.labor_cost,
+                            c.km_cost,
+                            c.iva,
+                            c.total
+                        }).FirstOrDefault(),
+
+                    Evidence = _context.evidence
+                        .Where(e => e.job_id == t.job_id)
+                        .Select(e => baseUrl + e.image_url)
+                        .ToList(),
 
                     t.job_date,
                     t.job_time,

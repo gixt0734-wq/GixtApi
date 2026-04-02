@@ -20,6 +20,8 @@ using GixtApiBackend.Application.UseCases.Favorites;
 using GixtApiBackend.Application.UseCases.Locations;
 using GixtApiBackend.Application.UseCases.Expresss;
 using GixtApiBackend.Application.UseCases.Jobs;
+using GixtApiBackend.Application.UseCases.Cost;
+using GixtApiBackend.Application.UseCases.Evidence;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -87,6 +89,8 @@ builder.Services.AddScoped<IFavoriteRepository, FavoriteRepository>();
 builder.Services.AddScoped<ILocationRepository, LocationRepository>();
 builder.Services.AddScoped<IExpressRepository, ExpressRepository>();
 builder.Services.AddScoped<IJobRepository, JobRepository>();
+builder.Services.AddScoped<ICostRepository, CostRepository>();
+builder.Services.AddScoped<IEvidenceRepository, EvidenceRepository>();
 
 // =======================================================
 // ?? USE CASES - USERS
@@ -154,6 +158,19 @@ builder.Services.AddScoped<UpdateLocation>();
 builder.Services.AddScoped<DeleteLocation>();
 builder.Services.AddScoped<GetLocationById>();
 builder.Services.AddScoped<GetLocationByUserId>();
+
+// =======================================================
+// ?? USE CASES - Cost
+// =======================================================
+builder.Services.AddScoped<CreateCost>();
+builder.Services.AddScoped<GetCost>();
+builder.Services.AddScoped<GetCostById>();
+
+
+// =======================================================
+// ?? USE CASES - Evidence
+// =======================================================
+builder.Services.AddScoped<CreateEvidence>();
 
 // =======================================================
 // ?? USE CASES - Express
