@@ -85,7 +85,8 @@ namespace GixtApiBackend.Infrastructure.Repositories
             var baseUrl = $"{request.Scheme}://{request.Host}";
 
             var result = await (
-                from c in _context.costs
+                from c in _context.costs 
+                where c.job_id == id
                 select new
                 {
                     c.materials,
