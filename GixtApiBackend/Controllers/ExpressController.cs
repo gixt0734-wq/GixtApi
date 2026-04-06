@@ -81,9 +81,9 @@ namespace GixtApi.Controllers
         }
         
         [HttpGet("review/{id}")]
-        public async Task<IActionResult> GetReviewById(Guid id)
+        public async Task<IActionResult> GetReviewById(Guid id, Guid idworker)
         {
-            var job = await _getExpressReviewById.Execute(id);
+            var job = await _getExpressReviewById.Execute(id,idworker);
 
             if (job == null)
                 return NotFound();

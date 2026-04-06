@@ -10,11 +10,11 @@ using GixtApiBackend.Domain.Entities;
 
 namespace GixtApiBackend.Application.Interfaces
 {
-    public interface ICostRepository
+    public interface IPaymentRepository
     {
-        Task CreateCostAsync(CostsDtos dto);
-        Task<IEnumerable<Costs>> GetAllCostAsync();
-        Task<object> GetCostByIdAsync(Guid id);
+        Task UpdatePaymentAsync(PaymentDtos dto);
+        Task<IEnumerable<Payment>> GetAllPaymentAsync();
+        Task<object> GetPaymentByIdAsync(Guid id);
 
     }
 }

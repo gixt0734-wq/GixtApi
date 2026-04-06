@@ -37,15 +37,12 @@ namespace GixtApiBackend.Infrastructure.Repositories
                 description = dto.description,
                 category_id = dto.category_id,
                 problem = dto.problem,
-                payment_method = dto.payment_method,
                 maps_address = dto.maps_address,
                 latitude = dto.latitude,
-                labor_cost = dto.labor_cost,
                 longitude = dto.longitude,
             };
 
             job.is_active = true;
-            job.payment_status = "pending";
             job.job_status = "pending";
          
             if (dto.image != null && dto.image.Length > 0)
@@ -62,17 +59,26 @@ namespace GixtApiBackend.Infrastructure.Repositories
                 job.image_url = "/img/jobs_express/" + fileName;
             }
 
-            
-            
-            await _context.express.AddAsync(job);
-            await _context.SaveChangesAsync();
-
             _ = Task.Run(() => _fcmService.SendNotificationByExpress(
                    job.category_id,
                    "Alguien necesita tu ayuda",
                    "Tienes un nuevo servicio express, verificalo",
                    job.express_id
                ));
+            
+            await _context.express.AddAsync(job);
+
+            var payment = new Payment
+            {
+                job_id = job.express_id,
+                payment_method = dto.payment_method,
+                payment_status = "pending"
+            };
+
+            await _context.payment.AddAsync(payment);
+            await _context.SaveChangesAsync();
+
+            
             return job.express_id;
         }
 
@@ -85,7 +91,7 @@ namespace GixtApiBackend.Infrastructure.Repositories
             return jobs;
         }
 
-        public async Task<object> GetExpressReviewIdAsync (Guid id)
+        public async Task<object> GetExpressReviewIdAsync (Guid id, Guid idworker)
         {
             var request = _httpContextAccessor.HttpContext.Request;
             var baseUrl = $"{request.Scheme}://{request.Host}";
@@ -109,6 +115,27 @@ namespace GixtApiBackend.Infrastructure.Repositories
                                 : baseUrl + u.image_url
                         }
                     ).FirstOrDefault(),
+                    Worker = (
+                        from w in _context.workers 
+                        where w.user_id == idworker
+                        select new
+                        {
+                          w.km_cost
+                        }
+                    ).FirstOrDefault(),
+                    payment = _context.payment
+                        .Where(c => c.job_id == e.express_id)
+                        .Select(c => new
+                        {
+                            c.materials,
+                            c.labor_cost,
+                            c.km_cost,
+                            c.payment_method,
+                            c.payment_status,
+                            c.iva,
+                            c.total
+                        }).FirstOrDefault(),
+
                     e.job_date,
                     e.job_time,
                     e.latitude,
@@ -116,11 +143,8 @@ namespace GixtApiBackend.Infrastructure.Repositories
                     e.maps_address,
                     e.description,
                     e.problem,
-                    e.labor_cost,
-                    e.payment_method,
                     e.is_active,
                     e.job_status,
-                    e.payment_status,
 
                     Image= string.IsNullOrEmpty(e.image_url)
                         ? null
@@ -171,11 +195,8 @@ namespace GixtApiBackend.Infrastructure.Repositories
                     e.maps_address,
                     e.description,
                     e.problem,
-                    e.labor_cost,
-                    e.payment_method,
                     e.is_active,
                     e.job_status,
-                    e.payment_status,
 
                     Image = string.IsNullOrEmpty(e.image_url)
                         ? null
@@ -374,8 +395,6 @@ namespace GixtApiBackend.Infrastructure.Repositories
                     t.job_date,
                     t.job_time,
                     t.is_active,
-                    t.payment_method,
-                    t.labor_cost,
                     t.job_status,
                     t.maps_address
                 }
@@ -390,6 +409,9 @@ namespace GixtApiBackend.Infrastructure.Repositories
         public async Task DeleteExpressAsync(Guid id)
         {
             var job = await _context.express.FindAsync(id);
+            var payment = _context.payment
+                .Where(p => p.job_id == job.express_id)
+                .FirstOrDefault();
             if (job == null)
             {
                 return;
@@ -399,6 +421,7 @@ namespace GixtApiBackend.Infrastructure.Repositories
             {
 
                 _context.express.Remove(job);
+                _context.payment.Remove(payment);
                 if (!string.IsNullOrEmpty(job.image_url))
                 {
                     var imagePath = job.image_url.TrimStart('/');
@@ -496,7 +519,6 @@ namespace GixtApiBackend.Infrastructure.Repositories
 
             existing.job_status = "accepted";
             existing.worker_id = worker_id;
-            existing.labor_cost = price;
             await _fcmService.SendNotificationByWorker(
                 worker_id,
                 "El cliente a aceptado",

@@ -16,7 +16,7 @@ namespace GixtApiBackend.Application.Interfaces
         Task DeleteExpressAsync(Guid id);
         Task CancelExpressAsync(Guid id);
         Task<IEnumerable<Express>> GetAllExpresssAsync();
-        Task<object> GetExpressReviewIdAsync(Guid id);
+        Task<object> GetExpressReviewIdAsync(Guid id, Guid idworker);
         Task<object> GetExpressByIdAsync(Guid id);
         //Task<object> GetExpressWorkerByIdAsync(Guid id);
         //Task<object> GetExpresssByUserIdAsync(Guid userId);

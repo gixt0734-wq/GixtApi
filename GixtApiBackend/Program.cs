@@ -20,8 +20,8 @@ using GixtApiBackend.Application.UseCases.Favorites;
 using GixtApiBackend.Application.UseCases.Locations;
 using GixtApiBackend.Application.UseCases.Expresss;
 using GixtApiBackend.Application.UseCases.Jobs;
-using GixtApiBackend.Application.UseCases.Cost;
 using GixtApiBackend.Application.UseCases.Evidence;
+using GixtApiBackend.Application.UseCases.Paymentss;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -89,7 +89,7 @@ builder.Services.AddScoped<IFavoriteRepository, FavoriteRepository>();
 builder.Services.AddScoped<ILocationRepository, LocationRepository>();
 builder.Services.AddScoped<IExpressRepository, ExpressRepository>();
 builder.Services.AddScoped<IJobRepository, JobRepository>();
-builder.Services.AddScoped<ICostRepository, CostRepository>();
+builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
 builder.Services.AddScoped<IEvidenceRepository, EvidenceRepository>();
 
 // =======================================================
@@ -162,9 +162,9 @@ builder.Services.AddScoped<GetLocationByUserId>();
 // =======================================================
 // ?? USE CASES - Cost
 // =======================================================
-builder.Services.AddScoped<CreateCost>();
-builder.Services.AddScoped<GetCost>();
-builder.Services.AddScoped<GetCostById>();
+builder.Services.AddScoped<UpdatePayment>();
+builder.Services.AddScoped<GetPayment>();
+builder.Services.AddScoped<GetPaymentById>();
 
 
 // =======================================================

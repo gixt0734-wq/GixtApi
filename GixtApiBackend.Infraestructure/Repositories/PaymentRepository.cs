@@ -11,14 +11,14 @@ using GixtApiBackend.Infraestructure;
 
 namespace GixtApiBackend.Infrastructure.Repositories
 {
-    public class CostRepository : ICostRepository
+    public class PaymentRepository : IPaymentRepository
     {
         private readonly AppDbContext _context;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ImageService _imageService;
         private readonly FcmService _fcmService;
 
-        public CostRepository(AppDbContext context, IHttpContextAccessor httpContextAccessor, FcmService fcmService, ImageService imageService)
+        public PaymentRepository(AppDbContext context, IHttpContextAccessor httpContextAccessor, FcmService fcmService, ImageService imageService)
         {
             _context = context;
             _httpContextAccessor = httpContextAccessor;
@@ -26,21 +26,21 @@ namespace GixtApiBackend.Infrastructure.Repositories
             _imageService = imageService;
         }
 
-        public async Task CreateCostAsync(CostsDtos dto)
+        public async Task UpdatePaymentAsync(PaymentDtos dto)
         {
-            var costs = new Costs
+
+            var existing =  _context.payment
+                .Where(p => p.job_id == dto.job_id)
+                .FirstOrDefault();
+
+            if (existing != null)
             {
-                job_id = dto.job_id,
-                materials = dto.materials,
-                labor_cost = dto.labor_cost,
-                km_cost = dto.km_cost,
-                iva = dto.iva,
-                total = dto.total
-            };
+                existing.materials = dto.materials;
+                existing.total = dto.total;
+                existing.iva = dto.iva;
+              
+            }
 
-                
-
-            await _context.costs.AddAsync(costs);
             await _context.SaveChangesAsync();
 
           
@@ -58,7 +58,7 @@ namespace GixtApiBackend.Infrastructure.Repositories
                 {
                     name = mat.name,
                     cost = mat.cost,
-                    cost_id = costs.cost_id
+                    payment_id = existing.payment_id
                 });
             }
 
@@ -69,9 +69,9 @@ namespace GixtApiBackend.Infrastructure.Repositories
             }
         }
 
-        public async Task<IEnumerable<Costs>> GetAllCostAsync()
+        public async Task<IEnumerable<Payment>> GetAllPaymentAsync()
         {
-            var cost = await _context.costs.ToListAsync();
+            var cost = await _context.payment.ToListAsync();
             var request = _httpContextAccessor.HttpContext.Request;
             var baseUrl = $"{request.Scheme}://{request.Host}";
 
@@ -79,24 +79,24 @@ namespace GixtApiBackend.Infrastructure.Repositories
         }
 
 
-        public async Task<object?> GetCostByIdAsync(Guid id)
+        public async Task<object?> GetPaymentByIdAsync(Guid id)
         {
             var request = _httpContextAccessor.HttpContext.Request;
             var baseUrl = $"{request.Scheme}://{request.Host}";
 
             var result = await (
-                from c in _context.costs 
+                from c in _context.payment 
                 where c.job_id == id
                 select new
                 {
                     c.materials,
                     c.job_id,
-                    c.cost_id,
+                    c.payment_id,
                     c.labor_cost,
                     c.km_cost,
                     c.iva,
                     List_Materials = _context.materials
-                        .Where(m => m.cost_id == c.cost_id)
+                        .Where(m => m.payment_id == c.payment_id)
                         .ToList(),
 
                 }

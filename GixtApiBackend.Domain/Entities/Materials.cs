@@ -14,7 +14,7 @@ namespace GixtApiBackend.Domain.Entities
     {
         [Key]
         public Guid materials_id { get; set; }
-        public Guid cost_id { get; set; }
+        public Guid payment_id { get; set; }
         public string name { get; set; }
         public decimal cost { get; set; }
 

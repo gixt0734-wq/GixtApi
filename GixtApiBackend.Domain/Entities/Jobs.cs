@@ -22,9 +22,6 @@ namespace GixtApiBackend.Domain.Entities
         public TimeOnly job_time { get; set; }
         public string problem { get; set; }
         public string description { get; set; }
-        public decimal labor_cost { get; set; }
-        public string payment_method { get; set; }
-        public string payment_status { get; set; }
         public string job_status { get; set; }
         public string image_1_url { get; set; }
         public string image_2_url { get; set; }

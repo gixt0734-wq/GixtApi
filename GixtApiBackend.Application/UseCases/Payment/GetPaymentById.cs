@@ -7,20 +7,20 @@ using GixtApiBackend.Application.DTos;
 using GixtApiBackend.Application.Interfaces;
 using GixtApiBackend.Domain.Entities;
 
-namespace GixtApiBackend.Application.UseCases.Cost
+namespace GixtApiBackend.Application.UseCases.Paymentss
 {
-    public class GetCostById
+    public class GetPaymentById
     {
-        private readonly ICostRepository _repo;
+        private readonly IPaymentRepository _repo;
 
-        public GetCostById(ICostRepository repo)
+        public GetPaymentById(IPaymentRepository repo)
         {
             _repo = repo;
         }
 
         public async Task<Object?> Execute(Guid id)
         {
-            return await _repo.GetCostByIdAsync(id);
+            return await _repo.GetPaymentByIdAsync(id);
         }
     }
 }

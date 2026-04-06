@@ -18,9 +18,9 @@ namespace GixtApiBackend.Application.UseCases.Expresss
             _repo = repo;
         }
 
-        public async Task<Object?> Execute(Guid id)
+        public async Task<Object?> Execute(Guid id, Guid idworker)
         {
-            return await _repo.GetExpressReviewIdAsync(id);
+            return await _repo.GetExpressReviewIdAsync(id,idworker);
         }
     }
 }

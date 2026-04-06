@@ -37,27 +37,29 @@ namespace GixtApiBackend.Infrastructure.Repositories
                 job_time = dto.job_time,
                 description = dto.description,
                 problem = dto.problem,
-                payment_method = dto.payment_method,
+             
             };
 
-            job.is_active = true;
-            job.payment_status = "pending";
+
             job.job_status = "pending";
-            job.labor_cost = 0;
+            job.is_active = true;
+
+            var service = _context.services
+              .Where(s => s.service_id == job.service_id)
+              .FirstOrDefault();
 
             var worker = (
                 from s in _context.services
                 join u in _context.workers
                     on s.worker_id equals u.worker_id
                 where s.service_id == job.service_id
-                select u.worker_id
+                select u
             ).FirstOrDefault();
-
 
 
             if (worker != null)
             {
-                job.worker_id = worker;
+                job.worker_id = worker.worker_id;
             }
 
 
@@ -88,12 +90,27 @@ namespace GixtApiBackend.Infrastructure.Repositories
 
                 job.image_2_url = "/img/jobs/" + fileName;
             }
-            _ = Task.Run(() => _fcmService.SendNotificationByWorker(
-                   job.worker_id,
-                   "Servcio Nuevo",
-                   "Tienes un nuevo servicio, verificalo", "Job"
-               ));
+          
             await _context.jobs.AddAsync(job);
+
+            var payment = new Payment
+            {
+                job_id = job.job_id,
+                labor_cost = service.labor_price,
+                km_cost = worker.km_cost,
+                payment_method = dto.payment_method,
+                payment_status = "pending"
+            };
+
+            await _context.payment.AddAsync(payment);
+
+            _ = Task.Run(() => _fcmService.SendNotificationByWorker(
+                  job.worker_id,
+                  "Servcio Nuevo",
+                  "Tienes un nuevo servicio, verificalo", "Job"
+              ));
+
+
             await _context.SaveChangesAsync();
         }
 
@@ -170,13 +187,15 @@ namespace GixtApiBackend.Infrastructure.Repositories
                                 : baseUrl + s.image_url
                         }).FirstOrDefault(),
 
-                    price = _context.costs
+                    payment = _context.payment
                         .Where(c => c.job_id == t.job_id)
                         .Select(c => new
                         {
                            c.materials,
                            c.labor_cost,
                            c.km_cost,
+                           c.payment_method,
+                           c.payment_status,
                            c.iva,
                            c.total
                         }).FirstOrDefault(),
@@ -190,11 +209,8 @@ namespace GixtApiBackend.Infrastructure.Repositories
                     t.job_time,
                     t.description,
                     t.problem,
-                    t.labor_cost,
-                    t.payment_method,
                     t.is_active,
                     t.job_status,
-                    t.payment_status,
 
                     Image_1 = string.IsNullOrEmpty(t.image_1_url)
                         ? null
@@ -276,7 +292,7 @@ namespace GixtApiBackend.Infrastructure.Repositories
                                 ? null
                                 : baseUrl + s.image_url
                         }).FirstOrDefault(),
-                    price = _context.costs
+                    price = _context.payment
                         .Where(c => c.job_id == t.job_id)
                         .Select(c => new
                         {
@@ -296,11 +312,8 @@ namespace GixtApiBackend.Infrastructure.Repositories
                     t.job_time,
                     t.description,
                     t.problem,
-                    t.labor_cost,
-                    t.payment_method,
                     t.is_active,
                     t.job_status,
-                    t.payment_status,
 
                     Image_1 = string.IsNullOrEmpty(t.image_1_url)
                         ? null
@@ -366,13 +379,20 @@ namespace GixtApiBackend.Infrastructure.Repositories
                                 ? null
                                 : baseUrl + s.image_url
                         }).FirstOrDefault(),
+                    payment = _context.payment
+                        .Where(c => c.job_id == t.job_id)
+                        .Select(c => new
+                        {
+                           
+                            c.labor_cost,
+                           
+                        }).FirstOrDefault(),
 
                     t.job_date,
                     t.job_time,
                     t.description,
                     t.problem,
                     t.is_active,
-                    t.labor_cost,
                     t.job_status,
                 }
             ).ToListAsync();
@@ -435,7 +455,14 @@ namespace GixtApiBackend.Infrastructure.Repositories
                     t.description,
                     t.problem,
                     t.is_active,
-                    t.labor_cost,
+                    payment = _context.payment
+                        .Where(c => c.job_id == t.job_id)
+                        .Select(c => new
+                        {
+                           
+                            c.labor_cost,
+                    
+                        }).FirstOrDefault(),
                     t.job_status,
                 }
             ).ToListAsync();
@@ -543,7 +570,7 @@ namespace GixtApiBackend.Infrastructure.Repositories
                 case "going":
 
                     existing.job_status = "arrived";
-                    existing.labor_cost = Math.Ceiling(service.labor_price / 2);
+                    
                     await _fcmService.SendNotificationByUser(
                         existing.client_id,
                         "El trabajador ya llego",

@@ -1,6 +1,7 @@
 ﻿
 using GixtApiBackend.Application.DTos;
-using GixtApiBackend.Application.UseCases.Cost;
+using GixtApiBackend.Application.UseCases.Paymentss;
+using GixtApiBackend.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -8,30 +9,30 @@ namespace GixtApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class CostsController : ControllerBase
+    public class PaymentController : ControllerBase
     {
-        private readonly CreateCost _createCost;
-        private readonly GetCost _getCost;
-        private readonly GetCostById _getCostById;
+        private readonly UpdatePayment _updatePayment;
+        private readonly GetPayment _getPayment;
+        private readonly GetPaymentById _getPaymentById;
 
 
-        public CostsController(
-            CreateCost createCost,
-            GetCost getCost,
-            GetCostById getCostById
+        public PaymentController(
+            UpdatePayment updatePayment,
+            GetPayment getPayment,
+            GetPaymentById getPaymentById
         )
         {
-            _createCost = createCost;
-            _getCost = getCost;
-            _getCostById = getCostById;
+            _updatePayment = updatePayment;
+            _getPayment = getPayment;
+            _getPaymentById = getPaymentById;
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] CostsDtos dto)
+        public async Task<IActionResult> Update([FromBody] PaymentDtos dto)
         {
             try
             {
-                await _createCost.Execute(dto);
+                await _updatePayment.Execute(dto);
                 return Ok(new { message = "Cost created successfully" });
             }
             catch (InvalidOperationException ex)
@@ -45,7 +46,7 @@ namespace GixtApi.Controllers
         {
             try
             {
-               var result =  await _getCost.Execute();
+               var result =  await _getPayment.Execute();
                 return Ok(result);
             }
             catch(Exception ex) {
@@ -58,7 +59,7 @@ namespace GixtApi.Controllers
         {
             try
             {
-                var result = await _getCostById.Execute(id);
+                var result = await _getPaymentById.Execute(id);
                 return Ok(result);
             }
             catch (Exception ex)

@@ -65,9 +65,9 @@ namespace GixtApiBackend.Infrastructure.Repositories
             }
         }
 
-        public async Task<IEnumerable<Costs>> GetAllCostAsync()
+        public async Task<IEnumerable<Payment>> GetAllCostAsync()
         {
-            var cost = await _context.costs.ToListAsync();
+            var cost = await _context.payment.ToListAsync();
             var request = _httpContextAccessor.HttpContext.Request;
             var baseUrl = $"{request.Scheme}://{request.Host}";
 
@@ -81,17 +81,17 @@ namespace GixtApiBackend.Infrastructure.Repositories
             var baseUrl = $"{request.Scheme}://{request.Host}";
 
             var result = await (
-                from c in _context.costs
+                from c in _context.payment
                 select new
                 {
                     c.materials,
                     c.job_id,
-                    c.cost_id,
+                    c.payment_id,
                     c.labor_cost,
                     c.km_cost,
                     c.iva,
                     List_Materials = _context.materials
-                        .Where(m => m.cost_id == c.cost_id)
+                        .Where(m => m.payment_id == c.payment_id)
                         .ToList(),
 
                 }
