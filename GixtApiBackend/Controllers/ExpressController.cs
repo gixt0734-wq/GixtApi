@@ -154,12 +154,11 @@ namespace GixtApi.Controllers
         }
 
         [HttpPatch("Accept")]
-        public async Task<IActionResult> Accept([FromForm] Guid express_id, [FromForm] Guid worker_id, [FromForm] decimal price)
+        public async Task<IActionResult> Accept([FromForm] Guid express_id, [FromForm] Guid worker_id, [FromForm] decimal km_cost, [FromForm]  decimal labor_price)
         {
             try
             {
-
-                await _acceptExpress.Execute(express_id, worker_id,price);
+                await _acceptExpress.Execute(express_id, worker_id,km_cost,labor_price);
                 return Ok(new { message = "Express Accept successfully" });
             }
 
@@ -171,12 +170,12 @@ namespace GixtApi.Controllers
 
 
         [HttpPost("Send")]
-        public async Task<IActionResult> SendAccept([FromForm] Guid worker, [FromForm] Guid id, [FromForm] decimal price)
+        public async Task<IActionResult> SendAccept([FromForm] Guid worker, [FromForm] Guid id, [FromForm] decimal km_cost, [FromForm] decimal labor_price)
         {
             try
             {
 
-                await _sendAccept.Execute(worker,id,price);
+                await _sendAccept.Execute(worker,id,km_cost,labor_price);
                 return Ok(new { message = "Send successfully" });
             }
 

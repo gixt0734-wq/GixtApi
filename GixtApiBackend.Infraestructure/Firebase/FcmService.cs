@@ -61,7 +61,7 @@ public class FcmService
 
     // Notificaciones Express
     //Propuestas de trabajadores
-    public async Task sendNotificationByExpress(Guid id, String username, Guid worker_id, string title, string body, decimal price)
+    public async Task sendNotificationByExpress(Guid id, String username, Guid worker_id, string title, string body, decimal km_cost, decimal labor_price)
     {
         var user = (
               from e in _context.express
@@ -76,7 +76,7 @@ public class FcmService
             return;
 
 
-        await SendNotificationExpressAsync(await user, id, worker_id, username, price, title, body);
+        await SendNotificationExpressAsync(await user, id, worker_id, username,labor_price, km_cost, title, body);
     }
     // Notificaciones de Nuevos Express hacia trabajadores
     public async Task SendNotificationByExpress(int id_category, string title, string body, Guid serviceId)
@@ -167,7 +167,8 @@ public class FcmService
         Guid expressid,
         Guid workerid,
         string username,
-        decimal price,
+        decimal labor_price,
+        decimal km_cost,
         string title,
         string body)
     {
@@ -187,7 +188,8 @@ public class FcmService
                 {"username" , username },
                 { "expressid",expressid.ToString() },
                 {"workerid",workerid.ToString() },
-                {"price",price.ToString() },
+                {"labor_price",labor_price.ToString() },
+                {"km_cost",km_cost.ToString() },
                 { "serviceType","express"},
             },
 

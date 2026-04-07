@@ -59,12 +59,7 @@ namespace GixtApiBackend.Infrastructure.Repositories
                 job.image_url = "/img/jobs_express/" + fileName;
             }
 
-            _ = Task.Run(() => _fcmService.SendNotificationByExpress(
-                   job.category_id,
-                   "Alguien necesita tu ayuda",
-                   "Tienes un nuevo servicio express, verificalo",
-                   job.express_id
-               ));
+            
             
             await _context.express.AddAsync(job);
 
@@ -78,7 +73,12 @@ namespace GixtApiBackend.Infrastructure.Repositories
             await _context.payment.AddAsync(payment);
             await _context.SaveChangesAsync();
 
-            
+            await _fcmService.SendNotificationByExpress(
+                   job.category_id,
+                   "Alguien necesita tu ayuda",
+                   "Tienes un nuevo servicio express, verificalo",
+                   job.express_id
+               );
             return job.express_id;
         }
 
@@ -479,10 +479,10 @@ namespace GixtApiBackend.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task SendAcceptAsync(Guid worker, Guid id, decimal price)
+        public async Task SendAcceptAsync(Guid worker, Guid id, decimal km_cost , decimal labor_price)
         {
             var service = await _context.express.FindAsync(id);
-
+         
             if (service == null)
                 return;
             
@@ -505,12 +505,13 @@ namespace GixtApiBackend.Infrastructure.Repositories
                 workerData.Username,
                 workerData.WorkerId,
                 $"{workerData.Username} a enviado una propuesta.",
-                $"{workerData.Username} a enviado una propuesta.",
-                price
+                $"{workerData.Username} realiza el trabajo por: {labor_price} y por ir ${km_cost}",
+                labor_price,km_cost
+                
             );
         }
 
-        public async Task AcceptExpressAsync(Guid express_id , Guid worker_id,decimal price)
+        public async Task AcceptExpressAsync(Guid express_id , Guid worker_id, decimal km_cost, decimal labor_price)
         {
             var existing = await _context.express.FindAsync(express_id);
 
@@ -519,6 +520,18 @@ namespace GixtApiBackend.Infrastructure.Repositories
 
             existing.job_status = "accepted";
             existing.worker_id = worker_id;
+
+            var existingpay = _context.payment
+                .Where(p => p.job_id == express_id)
+                .FirstOrDefault();
+
+            if (existingpay != null)
+            {
+                existingpay.km_cost = km_cost;
+                existingpay.labor_cost = labor_price;
+
+            }
+
             await _fcmService.SendNotificationByWorker(
                 worker_id,
                 "El cliente a aceptado",

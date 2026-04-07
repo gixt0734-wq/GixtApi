@@ -16,9 +16,9 @@ namespace GixtApiBackend.Application.UseCases.Expresss
             _repo = repo;
         }
 
-        public async Task Execute(Guid express_id,Guid worker_id,decimal price)
+        public async Task Execute(Guid express_id,Guid worker_id, decimal km_cost, decimal labor_price)
         {
-            await _repo.AcceptExpressAsync(express_id,worker_id,price);
+            await _repo.AcceptExpressAsync(express_id,worker_id,km_cost,labor_price);
         }
     }
 }
