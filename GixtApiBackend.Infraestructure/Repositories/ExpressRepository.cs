@@ -135,6 +135,10 @@ namespace GixtApiBackend.Infrastructure.Repositories
                             c.iva,
                             c.total
                         }).FirstOrDefault(),
+                    Evidence = _context.evidence
+                        .Where(c => c.job_id == e.express_id)
+                        .Select(c => baseUrl + c.image_url)
+                        .ToList(),
 
                     e.job_date,
                     e.job_time,
@@ -187,6 +191,23 @@ namespace GixtApiBackend.Infrastructure.Repositories
                                 : baseUrl + u.image_url
                         }
                     ).FirstOrDefault(),
+
+                    payment = _context.payment
+                        .Where(c => c.job_id == e.express_id)
+                        .Select(c => new
+                        {
+                            c.materials,
+                            c.labor_cost,
+                            c.km_cost,
+                            c.payment_method,
+                            c.payment_status,
+                            c.iva,
+                            c.total
+                        }).FirstOrDefault(),
+                    Evidence = _context.evidence
+                        .Where(c => c.job_id == e.express_id)
+                        .Select(c => baseUrl + c.image_url)
+                        .ToList(),
 
                     e.job_date,
                     e.job_time,
