@@ -611,13 +611,6 @@ namespace GixtApiBackend.Infrastructure.Repositories
 
                     var now = DateTime.Now;
 
-                    // Convertir DateOnly + TimeOnly → DateTime
-                    var jobDateTime = existing.job_date.ToDateTime(existing.job_time);
-
-                    // Validar: mismo día y máximo 30 minutos antes
-                    if (now < jobDateTime.AddMinutes(-30) || now.Date != jobDateTime.Date)
-                        throw new Exception("Solo puedes iniciar el servicio el mismo día o 30 minutos antes de la hora programada.");
-
                     existing.job_status = "in_progress";
 
                     await _fcmService.SendNotificationByUser(
