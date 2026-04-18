@@ -19,6 +19,7 @@ namespace GixtApi.Controllers
         private readonly UpdateJobStatus _updateJobStatus;
         private readonly CancelJob _cancelJob;
         private readonly GetReviewJobById _getReviewJobById;
+        private readonly AceptDiagnostic _aceptDiagnostic;
 
         public JobsController(
             CreateJob createJob,
@@ -29,8 +30,8 @@ namespace GixtApi.Controllers
             GetReviewJobById getReviewJobById,
             GetReviewJobWorker getReviewJobWorker,
             GetJobsByUserId getJobsByUserId,
-            GetJobsByWorkerId getJobsByWorkerId
-
+            GetJobsByWorkerId getJobsByWorkerId,
+            AceptDiagnostic aceptDiagnostic
         )
         {
             _createJob = createJob;
@@ -42,6 +43,7 @@ namespace GixtApi.Controllers
             _getReviewJobWorker = getReviewJobWorker;
             _getJobsByUserId = getJobsByUserId;
             _getJobsByWorkerId = getJobsByWorkerId;
+            _aceptDiagnostic = aceptDiagnostic;
         }
 
         [HttpPost]
@@ -116,8 +118,6 @@ namespace GixtApi.Controllers
             return Ok(job);
         }
 
-
-
         [HttpPatch("Status")]
         public async Task<IActionResult> UpdateStatus([FromForm] Guid id, [FromForm] string action)
         {
@@ -125,6 +125,21 @@ namespace GixtApi.Controllers
             {
 
                 await _updateJobStatus.Execute(id, action);
+                return Ok(new { message = "Job Status Updated successfully" });
+            }
+
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        [HttpPatch("AceptDiagnostic")]
+        public async Task<IActionResult> AceptDiagnostic([FromForm] Guid id)
+        {
+            try
+            {
+                await _aceptDiagnostic.Execute(id);
                 return Ok(new { message = "Job Status Updated successfully" });
             }
 

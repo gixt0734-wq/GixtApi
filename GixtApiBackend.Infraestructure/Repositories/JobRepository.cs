@@ -597,16 +597,6 @@ namespace GixtApiBackend.Infrastructure.Repositories
 
                     break;
 
-                case "diagnosing":
-
-                    existing.job_status = "in_progress";
-
-                    await _fcmService.SendNotificationByUser(
-                        existing.client_id,
-                        "Servicio en progreso 🚀",
-                        $"El trabajador ha iniciado el servicio '{service.service_name}'.", "Job"
-                    );
-                    break;
                 case "in_progress":
 
                     existing.job_status = "finalized";
@@ -638,7 +628,47 @@ namespace GixtApiBackend.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
+        public async Task AceptDiagnosticAsync(Guid id)
+        {
+            var existing = await _context.jobs.FindAsync(id);
 
+            if (existing == null)
+                throw new Exception("Trabajo no encontrado");
+
+            var service = await _context.services.FindAsync(existing.service_id);
+
+            existing.job_status = "in_progress";
+
+            await _fcmService.SendNotificationByWorker(
+                  existing.worker_id,
+                  "¡Diagnóstico aprobado!",
+                  $"El cliente aceptó tu diagnóstico para '{service.service_name}'. Puedes comenzar el servicio.",
+                  "Job"
+             );
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task FinishDiagnosticAsync(Guid id)
+        {
+            var existing = await _context.jobs.FindAsync(id);
+
+            if (existing == null)
+                throw new Exception("Trabajo no encontrado");
+
+            var service = await _context.services.FindAsync(existing.service_id);
+
+            existing.job_status = "completed";
+
+            await _fcmService.SendNotificationByWorker(
+                existing.worker_id,
+                "Diagnóstico rechazado",
+                $"El cliente no aceptó el diagnóstico de '{service.service_name}'. No te preocupes, se te pagará la visita de diagnóstico.",
+                "Job"
+            );
+
+            await _context.SaveChangesAsync();
+        }
     }
 
 }
