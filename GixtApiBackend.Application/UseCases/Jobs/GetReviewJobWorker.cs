@@ -9,18 +9,18 @@ using GixtApiBackend.Domain.Entities;
 
 namespace GixtApiBackend.Application.UseCases.Jobs
 {
-    public class GetJobWorkerById
+    public class GetReviewJobWorker
     {
         private readonly IJobRepository _repo;
 
-        public GetJobWorkerById(IJobRepository repo)
+        public GetReviewJobWorker(IJobRepository repo)
         {
             _repo = repo;
         }
 
         public async Task<Object?> Execute(Guid id)
         {
-            return await _repo.GetJobWorkerByIdAsync(id);
+            return await _repo.GetReviewJobByIdWorkerAsync(id);
         }
     }
 }

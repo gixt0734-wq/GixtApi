@@ -123,7 +123,7 @@ namespace GixtApiBackend.Infrastructure.Repositories
             return jobs;
         }
 
-        public async Task<object?> GetJobByIdAsync(Guid id)
+        public async Task<object?> GetReviewJobByIdAsync(Guid id)
         {
             var request = _httpContextAccessor.HttpContext.Request;
             var baseUrl = $"{request.Scheme}://{request.Host}";
@@ -229,8 +229,7 @@ namespace GixtApiBackend.Infrastructure.Repositories
             return result;
         }
 
-
-        public async Task<object?> GetJobWorkerByIdAsync(Guid id)
+        public async Task<object?> GetReviewJobByIdWorkerAsync(Guid id)
         {
             var request = _httpContextAccessor.HttpContext.Request;
             var baseUrl = $"{request.Scheme}://{request.Host}";
@@ -241,11 +240,11 @@ namespace GixtApiBackend.Infrastructure.Repositories
                 select new
                 {
                     t.job_id,
-                    t.client_id,
+                    t.worker_id,
 
                     Client = (
-                        from  u in _context.users 
-                        where u.user_id== t.client_id
+                        from u in _context.users
+                        where u.user_id == t.client_id
                         select new
                         {
                             u.first_name,
@@ -254,14 +253,6 @@ namespace GixtApiBackend.Infrastructure.Repositories
                                 ? null
                                 : baseUrl + u.image_url
                         }
-                    ).FirstOrDefault(),
-                    km_cost = (
-                        from s in _context.services
-                        join w in _context.workers on s.worker_id equals w.worker_id
-                        join u in _context.users on w.user_id equals u.user_id
-                        where s.service_id == t.service_id
-                        select w.km_cost
-                        
                     ).FirstOrDefault(),
 
                     location = _context.locations
@@ -289,17 +280,22 @@ namespace GixtApiBackend.Infrastructure.Repositories
                             s.service_id,
                             s.service_name,
                             s.description,
+                            s.labor_price,
+                            s.duration_hours,
                             Image = string.IsNullOrEmpty(s.image_url)
                                 ? null
                                 : baseUrl + s.image_url
                         }).FirstOrDefault(),
-                    price = _context.payment
+
+                    payment = _context.payment
                         .Where(c => c.job_id == t.job_id)
                         .Select(c => new
                         {
                             c.materials,
                             c.labor_cost,
                             c.km_cost,
+                            c.payment_method,
+                            c.payment_status,
                             c.iva,
                             c.total
                         }).FirstOrDefault(),
@@ -312,10 +308,10 @@ namespace GixtApiBackend.Infrastructure.Repositories
                     t.job_date,
                     t.job_time,
                     t.description,
-                    t.description_worker,
                     t.problem,
                     t.is_active,
                     t.job_status,
+                    t.description_worker,
 
                     Image_1 = string.IsNullOrEmpty(t.image_1_url)
                         ? null
@@ -641,8 +637,6 @@ namespace GixtApiBackend.Infrastructure.Repositories
 
             await _context.SaveChangesAsync();
         }
-
-
 
 
     }

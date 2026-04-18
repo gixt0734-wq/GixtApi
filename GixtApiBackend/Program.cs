@@ -196,10 +196,10 @@ builder.Services.AddScoped<UpdateJobStatus>();
 builder.Services.AddScoped<GetJob>();
 builder.Services.AddScoped<DeleteJob>();
 builder.Services.AddScoped<CancelJob>();
-builder.Services.AddScoped<GetJobById>();
-builder.Services.AddScoped<GetJobByUserId>();
-builder.Services.AddScoped<GetJobByWorkerId>();
-builder.Services.AddScoped<GetJobWorkerById>();
+builder.Services.AddScoped<GetReviewJobWorker>();
+builder.Services.AddScoped<GetJobsByUserId>();
+builder.Services.AddScoped<GetJobsByWorkerId>();
+builder.Services.AddScoped<GetReviewJobById>();
 
 // =======================================================
 // ?? JWT

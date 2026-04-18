@@ -13,34 +13,35 @@ namespace GixtApi.Controllers
         private readonly CreateJob _createJob;
         private readonly GetJob _getJobs;
         private readonly DeleteJob _deleteJob;
-        private readonly GetJobById _getJobById;
-        private readonly GetJobByUserId _getJobByUserId;
-        private readonly GetJobByWorkerId _getJobByWorkerId;
+        private readonly GetReviewJobWorker _getReviewJobWorker;
+        private readonly GetJobsByUserId _getJobsByUserId;
+        private readonly GetJobsByWorkerId _getJobsByWorkerId;
         private readonly UpdateJobStatus _updateJobStatus;
         private readonly CancelJob _cancelJob;
-        private readonly GetJobWorkerById _getJobWorkerById;
+        private readonly GetReviewJobById _getReviewJobById;
 
         public JobsController(
             CreateJob createJob,
             GetJob getJobs,
             DeleteJob deleteJob,
-            GetJobById getJobById,
-            GetJobByWorkerId getJobByWorkerId,
-            GetJobByUserId getJobByUserId,
             UpdateJobStatus updateJobStatus,
             CancelJob calcelJob,
-            GetJobWorkerById getJobWorkerById
+            GetReviewJobById getReviewJobById,
+            GetReviewJobWorker getReviewJobWorker,
+            GetJobsByUserId getJobsByUserId,
+            GetJobsByWorkerId getJobsByWorkerId
+
         )
         {
             _createJob = createJob;
             _getJobs = getJobs;
             _deleteJob = deleteJob;
             _cancelJob = calcelJob;
-            _getJobById = getJobById;
-            _getJobByUserId = getJobByUserId;
-            _getJobByWorkerId = getJobByWorkerId;
             _updateJobStatus = updateJobStatus;
-            _getJobWorkerById = getJobWorkerById;
+            _getReviewJobById = getReviewJobById;
+            _getReviewJobWorker = getReviewJobWorker;
+            _getJobsByUserId = getJobsByUserId;
+            _getJobsByWorkerId = getJobsByWorkerId;
         }
 
         [HttpPost]
@@ -74,7 +75,7 @@ namespace GixtApi.Controllers
         [HttpGet("id/{id}")]
         public async Task<IActionResult> GetById(Guid id)
         {
-            var job = await _getJobById.Execute(id);
+            var job = await _getReviewJobById.Execute(id);
 
             if (job == null)
                 return NotFound();
@@ -85,7 +86,7 @@ namespace GixtApi.Controllers
         [HttpGet("user/{id}")]
         public async Task<IActionResult> GetByUserId(Guid id)
         {
-            var job = await _getJobByUserId.Execute(id);
+            var job = await _getJobsByUserId.Execute(id);
 
             if (job == null)
                 return NotFound();
@@ -96,7 +97,7 @@ namespace GixtApi.Controllers
         [HttpGet("worker/{id}")]
         public async Task<IActionResult> GetByWorkerId(Guid id)
         {
-            var job = await _getJobByWorkerId.Execute(id);
+            var job = await _getJobsByWorkerId.Execute(id);
 
             if (job == null)
                 return NotFound();
@@ -107,7 +108,7 @@ namespace GixtApi.Controllers
         [HttpGet("worker/id/{id}")]
         public async Task<IActionResult> GetJobWorkerById(Guid id)
         {
-            var job = await _getJobWorkerById.Execute(id);
+            var job = await _getReviewJobWorker.Execute(id);
 
             if (job == null)
                 return NotFound();

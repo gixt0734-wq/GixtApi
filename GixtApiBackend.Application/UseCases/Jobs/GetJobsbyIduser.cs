@@ -9,11 +9,11 @@ using GixtApiBackend.Domain.Entities;
 
 namespace GixtApiBackend.Application.UseCases.Jobs
 {
-    public class GetJobByUserId
+    public class GetJobsByUserId
     {
         private readonly IJobRepository _repo;
 
-        public GetJobByUserId(IJobRepository repo)
+        public GetJobsByUserId(IJobRepository repo)
         {
             _repo = repo;
         }
