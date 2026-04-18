@@ -134,8 +134,8 @@ namespace GixtApi.Controllers
             }
         }
 
-        [HttpPatch("AceptDiagnostic")]
-        public async Task<IActionResult> AceptDiagnostic([FromForm] Guid id)
+        [HttpPatch("AceptDiagnostic/{id}")]
+        public async Task<IActionResult> AceptDiagnostic(Guid id)
         {
             try
             {
