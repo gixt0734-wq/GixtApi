@@ -211,6 +211,7 @@ namespace GixtApiBackend.Infrastructure.Repositories
                     t.problem,
                     t.is_active,
                     t.job_status,
+                    t.description_worker,
 
                     Image_1 = string.IsNullOrEmpty(t.image_1_url)
                         ? null
@@ -311,6 +312,7 @@ namespace GixtApiBackend.Infrastructure.Repositories
                     t.job_date,
                     t.job_time,
                     t.description,
+                    t.description_worker,
                     t.problem,
                     t.is_active,
                     t.job_status,
@@ -430,7 +432,7 @@ namespace GixtApiBackend.Infrastructure.Repositories
                                 : baseUrl + s.image_url
                         }
                     ).FirstOrDefault(),
-                    
+
                     location = _context.locations
                         .Where(l => l.location_id == t.location_id)
                         .Select(l => new
@@ -558,6 +560,15 @@ namespace GixtApiBackend.Infrastructure.Repositories
                     break;
                 case "accepted":
 
+                    var now = DateTime.Now;
+
+                    // Convertir DateOnly + TimeOnly → DateTime
+                    var jobDateTime = existing.job_date.ToDateTime(existing.job_time);
+
+                    // Validar: mismo día y máximo 30 minutos antes
+                    if (now < jobDateTime.AddMinutes(-90) || now.Date != jobDateTime.Date)
+                        throw new Exception("Solo puedes iniciar el servicio el mismo día o 30 minutos antes de la hora programada.");
+
                     existing.job_status = "going";
 
                     await _fcmService.SendNotificationByUser(
@@ -579,15 +590,6 @@ namespace GixtApiBackend.Infrastructure.Repositories
 
                     break;
                 case "arrived":
-
-                    var now = DateTime.Now;
-
-                    // Convertir DateOnly + TimeOnly → DateTime
-                    var jobDateTime = existing.job_date.ToDateTime(existing.job_time);
-
-                    // Validar: mismo día y máximo 30 minutos antes
-                    if (now < jobDateTime.AddMinutes(-30) || now.Date != jobDateTime.Date)
-                        throw new Exception("Solo puedes iniciar el servicio el mismo día o 30 minutos antes de la hora programada.");
 
                     existing.job_status = "in_progress";
 

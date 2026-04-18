@@ -33,11 +33,35 @@ namespace GixtApiBackend.Infrastructure.Repositories
                 .Where(p => p.job_id == dto.job_id)
                 .FirstOrDefault();
 
+            if (dto.isexpress)
+            {
+                var express = _context.express
+                .Where(p => p.express_id == dto.job_id)
+                .FirstOrDefault();
+            }
+            else
+            {
+                var job = _context.jobs
+                .Where(p => p.job_id == dto.job_id)
+                .FirstOrDefault();
+
+                job.description_worker = dto.description;
+
+                job.job_status = "diagnosing";
+
+                await _fcmService.SendNotificationByUser(
+                        job.client_id,
+                        "El trabajador ya diagnosito ",
+                        $"El trabajador de '{job.problem}' ya diagnositico tu problema.", "Job"
+                );
+            }
+
             if (existing != null)
             {
                 existing.materials = dto.materials;
                 existing.total = dto.total;
                 existing.iva = dto.iva;
+                existing.labor_cost = dto.labor_cost;
               
             }
 
