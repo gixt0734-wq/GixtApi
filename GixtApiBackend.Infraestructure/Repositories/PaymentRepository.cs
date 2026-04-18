@@ -47,13 +47,7 @@ namespace GixtApiBackend.Infrastructure.Repositories
 
                 job.description_worker = dto.description;
 
-                job.job_status = "diagnosing";
-
-                await _fcmService.SendNotificationByUser(
-                        job.client_id,
-                        "El trabajador ya diagnosito ",
-                        $"El trabajador de '{job.problem}' ya diagnositico tu problema.", "Job"
-                );
+                
             }
 
             if (existing != null)
