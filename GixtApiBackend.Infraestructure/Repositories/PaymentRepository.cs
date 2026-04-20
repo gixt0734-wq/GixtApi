@@ -38,6 +38,8 @@ namespace GixtApiBackend.Infrastructure.Repositories
                 var express = _context.express
                 .Where(p => p.express_id == dto.job_id)
                 .FirstOrDefault();
+
+                express.description_worker = dto.description;
             }
             else
             {

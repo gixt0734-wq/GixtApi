@@ -8,6 +8,7 @@ using GixtApiBackend.Application.DTos;
 using GixtApiBackend.Domain.Entities;
 using GixtApiBackend.Infraestructure;
 using Microsoft.AspNetCore.Http.HttpResults;
+using FirebaseAdmin.Messaging;
 
 
 namespace GixtApiBackend.Infrastructure.Repositories
@@ -589,6 +590,7 @@ namespace GixtApiBackend.Infrastructure.Repositories
                 case "accepted":
 
                     existing.job_status = "going";
+                    existing.start_job = DateTime.UtcNow;
 
                     await _fcmService.SendNotificationByUser(
                         existing.client_id,
@@ -607,16 +609,14 @@ namespace GixtApiBackend.Infrastructure.Repositories
                     );
 
                     break;
+
                 case "arrived":
-
-                    var now = DateTime.Now;
-
-                    existing.job_status = "in_progress";
+                    existing.job_status = "diagnosing";
 
                     await _fcmService.SendNotificationByUser(
-                        existing.client_id,
-                        "Servicio en progreso 🚀",
-                        $"El trabajador ha iniciado el servicio '{existing.problem}'.", "Express"
+                            existing.client_id,
+                            "El trabajador ya diagnosito ",
+                            $"El trabajador de '{existing.problem}' ya diagnositico tu problema.", "Job"
                     );
 
                     break;
@@ -648,6 +648,32 @@ namespace GixtApiBackend.Infrastructure.Repositories
                 default:
                     throw new Exception("Acción no válida");
             }
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task AceptDiagnosticExpAsync(Guid id)
+        {
+            var existing = await _context.express.FindAsync(id);
+
+            if (existing == null)
+                throw new Exception("Trabajo no encontrado");
+
+            var service = await _context.services.FindAsync(existing.express_id);
+
+            existing.job_status = "in_progress";
+
+            if (existing.worker_id == null)
+            { 
+                throw new Exception("trabajador no encontrado");
+            }
+                
+            await _fcmService.SendNotificationByWorker(
+                  existing.worker_id.Value,
+                  "¡Diagnóstico aprobado!",
+                  $"El cliente aceptó tu diagnóstico para '{service.service_name}'. Puedes comenzar el servicio.",
+                  "Job"
+             );
 
             await _context.SaveChangesAsync();
         }

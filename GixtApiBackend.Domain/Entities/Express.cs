@@ -21,7 +21,10 @@ namespace GixtApiBackend.Domain.Entities
         public TimeOnly job_time { get; set; }
         public string problem { get; set; }
         public string description { get; set; }
+        public string? description_worker { get; set; }
         public string job_status { get; set; }
+        public DateTime start_job { get; set; }
+        public DateTime finish_job { get; set; }
         public string image_url { get; set; }
         public string maps_address { get; set; }
         public decimal latitude { get; set; }

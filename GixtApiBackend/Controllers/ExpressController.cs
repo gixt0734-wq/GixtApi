@@ -1,6 +1,7 @@
 ﻿
 using GixtApiBackend.Application.DTos;
 using GixtApiBackend.Application.UseCases.Expresss;
+using GixtApiBackend.Application.UseCases.Jobs;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -21,6 +22,7 @@ namespace GixtApi.Controllers
         private readonly UpdateExpressStatus _updateExpressStatus;
         private readonly SendAccept _sendAccept;
         private readonly AcceptExpress _acceptExpress;
+        private readonly AceptDiagnosticExp _aceptDiagnosticExp;
         //private readonly GetExpressWorkerById _getExpressWorkerById;
 
         public ExpresssController(
@@ -34,7 +36,8 @@ namespace GixtApi.Controllers
             UpdateExpressStatus updateExpressStatus,
             SendAccept sendAccept,
             AcceptExpress acceptExpress,
-            GetExpressReviewById getExpressReviewById
+            GetExpressReviewById getExpressReviewById,
+            AceptDiagnosticExp aceptDiagnosticExp
             //GetExpressWorkerById getExpressWorkerById
         )
         {
@@ -49,6 +52,7 @@ namespace GixtApi.Controllers
             _updateExpressStatus = updateExpressStatus;
             _sendAccept = sendAccept;
             _acceptExpress = acceptExpress;
+            _aceptDiagnosticExp = aceptDiagnosticExp;
             //_getExpressWorkerById = getExpressWorkerById;
         }
 
@@ -145,6 +149,21 @@ namespace GixtApi.Controllers
 
                 await _updateExpressStatus.Execute(id, action);
                 return Ok(new { message = "Express Status Updated successfully" });
+            }
+
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        [HttpPatch("AceptDiagnosticExp/{id}")]
+        public async Task<IActionResult> AceptDiagnostic(Guid id)
+        {
+            try
+            {
+                await _aceptDiagnosticExp.Execute(id);
+                return Ok(new { message = "Job Status Updated successfully" });
             }
 
             catch (Exception ex)

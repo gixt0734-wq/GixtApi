@@ -186,6 +186,7 @@ builder.Services.AddScoped<GetExpressReviewById>();
 builder.Services.AddScoped<GetExpressById>();
 //builder.Services.AddScoped<GetExpressByUserId>();
 builder.Services.AddScoped<GetExpressByWorkerId>();
+builder.Services.AddScoped<AceptDiagnosticExp>();
 //builder.Services.AddScoped<GetExpressWorkerById>();
 
 // =======================================================
@@ -200,7 +201,7 @@ builder.Services.AddScoped<GetReviewJobWorker>();
 builder.Services.AddScoped<GetJobsByUserId>();
 builder.Services.AddScoped<GetJobsByWorkerId>();
 builder.Services.AddScoped<GetReviewJobById>();
-builder.Services.AddScoped<AceptDiagnostic>();
+builder.Services.AddScoped<AceptDiagnosticExp>();
 
 // =======================================================
 // ?? JWT
