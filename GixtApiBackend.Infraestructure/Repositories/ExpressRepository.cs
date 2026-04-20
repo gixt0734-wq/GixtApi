@@ -659,7 +659,6 @@ namespace GixtApiBackend.Infrastructure.Repositories
             if (existing == null)
                 throw new Exception("Trabajo no encontrado");
 
-            var service = await _context.services.FindAsync(existing.express_id);
 
             existing.job_status = "in_progress";
 
@@ -671,7 +670,7 @@ namespace GixtApiBackend.Infrastructure.Repositories
             await _fcmService.SendNotificationByWorker(
                   existing.worker_id.Value,
                   "¡Diagnóstico aprobado!",
-                  $"El cliente aceptó tu diagnóstico para '{service.service_name}'. Puedes comenzar el servicio.",
+                  $"El cliente aceptó tu diagnóstico para '{existing.problem}'. Puedes comenzar el servicio.",
                   "Job"
              );
 
