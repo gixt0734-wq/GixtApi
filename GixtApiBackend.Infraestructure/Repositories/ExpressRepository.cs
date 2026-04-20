@@ -688,7 +688,7 @@ namespace GixtApiBackend.Infrastructure.Repositories
 
 
             existing.job_status = "completed";
-
+            existing.finish_job = DateTime.UtcNow;
             if (existing.worker_id == null)
             {
                 throw new Exception("trabajador no encontrado");
