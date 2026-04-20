@@ -698,7 +698,7 @@ namespace GixtApiBackend.Infrastructure.Repositories
                  existing.worker_id.Value,
                  "¡Trabajo completado!",
                  $"Has finalizado exitosamente el servicio '{existing.problem}'. ¡Buen trabajo!",
-                 "Job"
+                 "Express"
              );
 
             await _fcmService.SendNotificationByUser(
