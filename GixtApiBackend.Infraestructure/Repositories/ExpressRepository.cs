@@ -671,7 +671,7 @@ namespace GixtApiBackend.Infrastructure.Repositories
                   existing.worker_id.Value,
                   "¡Diagnóstico aprobado!",
                   $"El cliente aceptó tu diagnóstico para '{existing.problem}'. Puedes comenzar el servicio.",
-                  "Job"
+                  "Express"
              );
 
 
