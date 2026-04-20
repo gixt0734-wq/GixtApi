@@ -24,8 +24,8 @@ namespace GixtApiBackend.Domain.Entities
         public string description { get; set; }
         public string? description_worker { get; set; }
         public string job_status { get; set; }
-        public DateTime start_job { get; set; }
-        public DateTime finish_job { get; set; }
+        public DateTime? start_job { get; set; }
+        public DateTime? finish_job { get; set; }
         public string image_1_url { get; set; }
         public string image_2_url { get; set; }
         public bool is_active { get; set; }

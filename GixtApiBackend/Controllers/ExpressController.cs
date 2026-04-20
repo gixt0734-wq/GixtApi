@@ -23,6 +23,7 @@ namespace GixtApi.Controllers
         private readonly SendAccept _sendAccept;
         private readonly AcceptExpress _acceptExpress;
         private readonly AceptDiagnosticExp _aceptDiagnosticExp;
+        private readonly FinishExpress _finishExpress;
         //private readonly GetExpressWorkerById _getExpressWorkerById;
 
         public ExpresssController(
@@ -37,8 +38,9 @@ namespace GixtApi.Controllers
             SendAccept sendAccept,
             AcceptExpress acceptExpress,
             GetExpressReviewById getExpressReviewById,
-            AceptDiagnosticExp aceptDiagnosticExp
-            //GetExpressWorkerById getExpressWorkerById
+            AceptDiagnosticExp aceptDiagnosticExp,
+            FinishExpress finishExpress
+        //GetExpressWorkerById getExpressWorkerById
         )
         {
             _createExpress = createExpress;
@@ -53,6 +55,7 @@ namespace GixtApi.Controllers
             _sendAccept = sendAccept;
             _acceptExpress = acceptExpress;
             _aceptDiagnosticExp = aceptDiagnosticExp;
+            _finishExpress = finishExpress;
             //_getExpressWorkerById = getExpressWorkerById;
         }
 
@@ -163,6 +166,21 @@ namespace GixtApi.Controllers
             try
             {
                 await _aceptDiagnosticExp.Execute(id);
+                return Ok(new { message = "Job Status Updated successfully" });
+            }
+
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        [HttpPatch("FinishExpress/{id}")]
+        public async Task<IActionResult> FinishExpress(Guid id)
+        {
+            try
+            {
+                await _finishExpress.Execute(id);
                 return Ok(new { message = "Job Status Updated successfully" });
             }
 

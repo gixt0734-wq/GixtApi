@@ -8,18 +8,18 @@ using GixtApiBackend.Domain.Entities;
 
 namespace GixtApiBackend.Application.UseCases.Expresss
 { 
-   public class AceptDiagnosticExp
+   public class FinishExpress
     {
         private readonly IExpressRepository _repository;
 
-        public AceptDiagnosticExp(IExpressRepository repository)
+        public FinishExpress(IExpressRepository repository)
         {
             _repository = repository;
         }
 
         public async Task Execute(Guid id)
         {
-            await _repository.AceptDiagnosticExpAsync(id);
+            await _repository.FinishExpressAsync(id);
         }
     }
 }

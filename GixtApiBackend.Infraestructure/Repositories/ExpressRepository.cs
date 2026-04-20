@@ -674,10 +674,42 @@ namespace GixtApiBackend.Infrastructure.Repositories
                   "Job"
              );
 
+
+
             await _context.SaveChangesAsync();
         }
 
+        public async Task FinishExpressAsync(Guid id)
+        {
+            var existing = await _context.express.FindAsync(id);
 
+            if (existing == null)
+                throw new Exception("Trabajo no encontrado");
+
+
+            existing.job_status = "completed";
+
+            if (existing.worker_id == null)
+            {
+                throw new Exception("trabajador no encontrado");
+            }
+
+            await _fcmService.SendNotificationByWorker(
+                 existing.worker_id.Value,
+                 "¡Trabajo completado!",
+                 $"Has finalizado exitosamente el servicio '{existing.problem}'. ¡Buen trabajo!",
+                 "Job"
+             );
+
+            await _fcmService.SendNotificationByUser(
+                existing.client_id,
+                " ¡Servicio completado!",
+                $"Tu servicio '{existing.problem}' ha sido finalizado con éxito. ¡Gracias por confiar en nosotros!",
+                "Express"
+            );
+
+            await _context.SaveChangesAsync();
+        }
 
 
     }

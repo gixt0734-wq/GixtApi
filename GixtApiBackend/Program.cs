@@ -187,6 +187,7 @@ builder.Services.AddScoped<GetExpressById>();
 //builder.Services.AddScoped<GetExpressByUserId>();
 builder.Services.AddScoped<GetExpressByWorkerId>();
 builder.Services.AddScoped<AceptDiagnosticExp>();
+builder.Services.AddScoped<FinishExpress>();
 //builder.Services.AddScoped<GetExpressWorkerById>();
 
 // =======================================================

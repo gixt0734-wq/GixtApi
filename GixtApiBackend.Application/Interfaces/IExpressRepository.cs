@@ -25,6 +25,7 @@ namespace GixtApiBackend.Application.Interfaces
         Task AcceptExpressAsync(Guid express_id ,Guid worker_id,decimal km_cost, decimal labor_price);
         Task SendAcceptAsync(Guid worker, Guid id, decimal km_cost, decimal labor_price);
         Task AceptDiagnosticExpAsync(Guid id);
+        Task FinishExpressAsync(Guid id);
 
     }
 }
