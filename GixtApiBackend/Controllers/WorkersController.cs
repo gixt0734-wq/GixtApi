@@ -15,6 +15,7 @@ namespace GixtApiBackend.Controllers
         private readonly CreateInfoWorker _createInfoWorker;
         private readonly GetWorkers _getWorkers;
         private readonly UpdateWorker _updateWorker;
+        private readonly UpdateInfoWorker _updateInfoWorker;
         private readonly DeleteWorker _deleteWorker;
         private readonly GetWorkerById _getWorkerById;
         private readonly GetInfoWorkerById _getInfoWorkerById;
@@ -26,7 +27,8 @@ namespace GixtApiBackend.Controllers
             GetInfoWorkerById getInfoWorkerById,
             UpdateWorker updateWorker,
             DeleteWorker deleteWorker,
-            GetWorkerById getWorkerById
+            GetWorkerById getWorkerById,
+            UpdateInfoWorker updateInfoWorker
 
         )
         {
@@ -37,6 +39,8 @@ namespace GixtApiBackend.Controllers
             _updateWorker = updateWorker;
             _deleteWorker = deleteWorker;
             _getWorkerById = getWorkerById;
+            _updateInfoWorker = updateInfoWorker;
+
         }
 
         [HttpPost]
@@ -66,6 +70,7 @@ namespace GixtApiBackend.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
+
 
        
 
@@ -112,6 +117,16 @@ namespace GixtApiBackend.Controllers
                 return BadRequest(new { message = "The user ID does not match the request body." });
 
             await _updateWorker.Execute(dto);
+            return Ok(new { message = "Worker updated successfully" });
+        }
+
+        [HttpPut("info/{id}")]
+        public async Task<IActionResult> PutInfo(Guid id, [FromForm] WorkerDTO dto)
+        {
+            if (id != dto.user_id)
+                return BadRequest(new { message = "The user ID does not match the request body." });
+
+            await _updateInfoWorker.Execute(dto);
             return Ok(new { message = "Worker updated successfully" });
         }
 

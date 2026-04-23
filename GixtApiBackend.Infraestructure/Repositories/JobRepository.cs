@@ -509,7 +509,7 @@ namespace GixtApiBackend.Infrastructure.Repositories
                      );
             }
         }
-
+        
         public async Task CancelJobAsync(Guid id)
         {
             var existing = await _context.jobs.FindAsync(id);

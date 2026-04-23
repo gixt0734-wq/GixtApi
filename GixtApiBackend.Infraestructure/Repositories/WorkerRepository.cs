@@ -340,18 +340,19 @@ namespace GixtApi.Infrastructure.Repositories
                 await _context.SaveChangesAsync();
             }
         }
-        
-        public async Task UpdateInfoWorkerAsync(Worker dto)
+
+        public async Task UpdateInfoWorkerAsync(WorkerDTO dto)
         {
             if (dto == null)
                 throw new Exception("Datos inválidos");
 
-            var existing = await _context.workers.FindAsync(dto.worker_id);
+            var existing = await _context.workers
+                .Where(p => p.user_id == dto.user_id)
+                .FirstOrDefaultAsync();
 
             if (existing == null)
-                throw new Exception("Usuario no encontrado");
+                throw new Exception("Worker no encontrado");
 
-            // Solo actualizar si vienen valores
             if (!string.IsNullOrWhiteSpace(dto.description))
                 existing.description = dto.description;
 

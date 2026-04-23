@@ -18,7 +18,7 @@ namespace GixtApiBackend.Application.UseCases.Workers
             _repo = repo;
         }
 
-        public async Task Execute(Worker dto)
+        public async Task Execute(WorkerDTO dto)
         {
             await _repo.UpdateInfoWorkerAsync(dto);
         }
