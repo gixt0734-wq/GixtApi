@@ -111,21 +111,17 @@ namespace GixtApiBackend.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(Guid id, [FromForm] UserUpdateDTO dto)
+        public async Task<IActionResult> Put([FromForm] UserUpdateDTO dto)
         {
-            if (id != dto.user_id)
-                return BadRequest(new { message = "The user ID does not match the request body." });
+
 
             await _updateWorker.Execute(dto);
             return Ok(new { message = "Worker updated successfully" });
         }
 
-        [HttpPut("info/{id}")]
-        public async Task<IActionResult> PutInfo(Guid id, [FromForm] WorkerDTO dto)
+        [HttpPut("info")]
+        public async Task<IActionResult> PutInfo([FromForm] WorkerDTO dto)
         {
-            if (id != dto.user_id)
-                return BadRequest(new { message = "The user ID does not match the request body." });
-
             await _updateInfoWorker.Execute(dto);
             return Ok(new { message = "Worker updated successfully" });
         }
