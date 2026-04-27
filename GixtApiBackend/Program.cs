@@ -109,6 +109,7 @@ builder.Services.AddScoped<CreateWorker>();
 builder.Services.AddScoped<CreateInfoWorker>();
 builder.Services.AddScoped<GetWorkers>();
 builder.Services.AddScoped<UpdateWorker>();
+builder.Services.AddScoped<UpdateInfoWorker>();
 builder.Services.AddScoped<DeleteWorker>();
 builder.Services.AddScoped<GetWorkerById>();
 builder.Services.AddScoped<GetInfoWorkerById>();
