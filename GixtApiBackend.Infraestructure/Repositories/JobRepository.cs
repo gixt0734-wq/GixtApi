@@ -691,14 +691,14 @@ namespace GixtApiBackend.Infraestructure.Repositories
                  existing.worker_id,
                  "¡Trabajo completado!",
                  $"Has finalizado exitosamente el servicio '{existing.problem}'. ¡Buen trabajo!",
-                 "Express"
+                 "Job"
              );
 
             await _fcmService.SendNotificationByUser(
                 existing.client_id,
                 " ¡Servicio completado!",
                 $"Tu servicio '{existing.problem}' ha sido finalizado con éxito. ¡Gracias por confiar en nosotros!",
-                "Express"
+                "Job"
             );
 
             await _context.SaveChangesAsync();
