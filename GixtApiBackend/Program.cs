@@ -205,6 +205,7 @@ builder.Services.AddScoped<GetJobsByUserId>();
 builder.Services.AddScoped<GetJobsByWorkerId>();
 builder.Services.AddScoped<GetReviewJobById>();
 builder.Services.AddScoped<AceptDiagnostic>();
+builder.Services.AddScoped<FinishJob>();
 
 // =======================================================
 // ?? USE CASES - Jobs

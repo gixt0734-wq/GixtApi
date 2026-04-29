@@ -570,6 +570,7 @@ namespace GixtApiBackend.Infraestructure.Repositories
                         throw new Exception("Solo puedes iniciar el servicio el mismo día o 30 minutos antes de la hora programada.");
 
                     existing.job_status = "going";
+                    existing.start_job = DateTime.UtcNow;
 
                     await _fcmService.SendNotificationByUser(
                         existing.client_id,
@@ -673,6 +674,36 @@ namespace GixtApiBackend.Infraestructure.Repositories
 
             await _context.SaveChangesAsync();
         }
+
+        public async Task FinishJobAsync(Guid id)
+        {
+            var existing = await _context.jobs.FindAsync(id);
+
+            if (existing == null)
+                throw new Exception("Trabajo no encontrado");
+
+
+            existing.job_status = "completed";
+            existing.finish_job = DateTime.UtcNow;
+
+
+            await _fcmService.SendNotificationByWorker(
+                 existing.worker_id,
+                 "¡Trabajo completado!",
+                 $"Has finalizado exitosamente el servicio '{existing.problem}'. ¡Buen trabajo!",
+                 "Express"
+             );
+
+            await _fcmService.SendNotificationByUser(
+                existing.client_id,
+                " ¡Servicio completado!",
+                $"Tu servicio '{existing.problem}' ha sido finalizado con éxito. ¡Gracias por confiar en nosotros!",
+                "Express"
+            );
+
+            await _context.SaveChangesAsync();
+        }
+
     }
 
 }

@@ -22,6 +22,7 @@ namespace GixtApiBackend.Application.Interfaces
         Task<object> GetJobsByWorkerIdAsync(Guid id);
         Task UpdateJobStatusAsync(Guid id, String action);
         Task AceptDiagnosticAsync(Guid id);
+        Task FinishJobAsync(Guid id);
 
     }
 }

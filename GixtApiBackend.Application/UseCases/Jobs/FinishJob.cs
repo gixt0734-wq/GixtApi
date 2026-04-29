@@ -6,20 +6,20 @@ using System.Threading.Tasks;
 using GixtApiBackend.Application.Interfaces;
 using GixtApiBackend.Domain.Entities;
 
-namespace GixtApiBackend.Application.UseCases.Expresss
+namespace GixtApiBackend.Application.UseCases.Jobs
 {
-    public class AceptDiagnosticExp
+    public class FinishJob
     {
-        private readonly IExpressRepository _repository;
+        private readonly IJobRepository _repository;
 
-        public AceptDiagnosticExp(IExpressRepository repository)
+        public FinishJob(IJobRepository repository)
         {
             _repository = repository;
         }
 
         public async Task Execute(Guid id)
         {
-            await _repository.AceptDiagnosticExpAsync(id);
+            await _repository.FinishJobAsync(id);
         }
     }
 }

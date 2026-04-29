@@ -1,5 +1,6 @@
 ﻿
 using GixtApiBackend.Application.DTos;
+using GixtApiBackend.Application.UseCases.Expresss;
 using GixtApiBackend.Application.UseCases.Jobs;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,6 +21,7 @@ namespace GixtApi.Controllers
         private readonly CancelJob _cancelJob;
         private readonly GetReviewJobById _getReviewJobById;
         private readonly AceptDiagnostic _aceptDiagnostic;
+        private readonly FinishJob _finishJob;
 
         public JobsController(
             CreateJob createJob,
@@ -31,7 +33,8 @@ namespace GixtApi.Controllers
             GetReviewJobWorker getReviewJobWorker,
             GetJobsByUserId getJobsByUserId,
             GetJobsByWorkerId getJobsByWorkerId,
-            AceptDiagnostic aceptDiagnostic
+            AceptDiagnostic aceptDiagnostic,
+            FinishJob finishJob
         )
         {
             _createJob = createJob;
@@ -44,6 +47,7 @@ namespace GixtApi.Controllers
             _getJobsByUserId = getJobsByUserId;
             _getJobsByWorkerId = getJobsByWorkerId;
             _aceptDiagnostic = aceptDiagnostic;
+            _finishJob = finishJob;
         }
 
         [HttpPost]
@@ -140,6 +144,21 @@ namespace GixtApi.Controllers
             try
             {
                 await _aceptDiagnostic.Execute(id);
+                return Ok(new { message = "Job Status Updated successfully" });
+            }
+
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        [HttpPatch("Finish/{id}")]
+        public async Task<IActionResult> FinishJob(Guid id)
+        {
+            try
+            {
+                await _finishJob.Execute(id);
                 return Ok(new { message = "Job Status Updated successfully" });
             }
 
