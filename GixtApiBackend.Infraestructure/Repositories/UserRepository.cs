@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using System.IO;
-using GixtApiBackend.Infrastructure;
+using GixtApiBackend.Infraestructure;
 using GixtApiBackend.Domain.Entities;
 using GixtApiBackend.Infraestructure;
 using GixtApiBackend.Application.Interfaces;
@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Http;
 using GixtApiBackend.Application.DTos;
 
 
-namespace GixtApi.Infrastructure.Repositories
+namespace GixtApi.Infraestructure.Repositories
 {
     public class UserRepository : IUserRepository
     {

@@ -1,6 +1,6 @@
 ﻿using FirebaseAdmin.Messaging;
 using GixtApiBackend.Domain.Entities;
-using GixtApiBackend.Infrastructure;
+using GixtApiBackend.Infraestructure;
 using Microsoft.EntityFrameworkCore;
 
 public class FcmService

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using GixtApiBackend.Application.DTos;
-using GixtApiBackend.Infrastructure;
+using GixtApiBackend.Infraestructure;
 using AutoMapper;
 using GixtApiBackend.Domain.Entities;
 namespace GixtApi.Controllers

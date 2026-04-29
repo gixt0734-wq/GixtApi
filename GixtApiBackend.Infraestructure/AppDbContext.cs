@@ -7,7 +7,7 @@ using GixtApiBackend.Application.Entities;
 using GixtApiBackend.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace GixtApiBackend.Infrastructure
+namespace GixtApiBackend.Infraestructure
 {
     public class AppDbContext : DbContext
     {
@@ -27,6 +27,8 @@ namespace GixtApiBackend.Infrastructure
         public DbSet<Payment> payment { get; set; } = null!;
         public DbSet<Materials> materials { get; set; } = null!;
         public DbSet<Evidence> evidence { get; set; } = null!;
+        public DbSet<Reviews_workers> reviews_workers { get; set; } = null!;
+        public DbSet<Reviews> reviews { get; set; } = null!;
     }
 
 }

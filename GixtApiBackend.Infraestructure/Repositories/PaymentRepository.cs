@@ -2,14 +2,14 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using System.IO;
-using GixtApiBackend.Infrastructure;
+using GixtApiBackend.Infraestructure;
 using GixtApiBackend.Application.Interfaces;
 using GixtApiBackend.Application.DTos;
 using GixtApiBackend.Domain.Entities;
 using GixtApiBackend.Infraestructure;
 
 
-namespace GixtApiBackend.Infrastructure.Repositories
+namespace GixtApiBackend.Infraestructure.Repositories
 {
     public class PaymentRepository : IPaymentRepository
     {

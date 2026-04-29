@@ -2,14 +2,14 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using System.IO;
-using GixtApiBackend.Infrastructure;
+using GixtApiBackend.Infraestructure;
 using GixtApiBackend.Application.Interfaces;
 using GixtApiBackend.Application.Entities;
 using GixtApiBackend.Domain.Entities;
 using GixtApiBackend.Application.DTos;
 
 
-namespace GixtApiBackend.Infrastructure.Repositories
+namespace GixtApiBackend.Infraestructure.Repositories
 {
     public class LocationRepository : ILocationRepository
     {

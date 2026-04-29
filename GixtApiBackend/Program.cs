@@ -1,6 +1,6 @@
 ﻿using System.Text;
 using FirebaseAdmin;
-using GixtApiBackend.Infrastructure;
+using GixtApiBackend.Infraestructure;
 using Google.Apis.Auth.OAuth2;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -10,11 +10,9 @@ using Microsoft.Extensions.DependencyInjection;
 using GixtApiBackend.Application.Interfaces;
 using GixtApiBackend.Application.UseCases.Users;
 using GixtApiBackend.Application.UseCases.Workers;
-using GixtApi.Infrastructure.Repositories;
+using GixtApi.Infraestructure.Repositories;
 using GixtApiBackend.Application.UseCases.Advertisements;
-using GixtApiBackend.Infraestructure;
 using GixtApiBackend.Application.UseCases.Categories;
-using GixtApiBackend.Infrastructure.Repositories;
 using GixtApiBackend.Application.UseCases.Services;
 using GixtApiBackend.Application.UseCases.Favorites;
 using GixtApiBackend.Application.UseCases.Locations;
@@ -22,6 +20,8 @@ using GixtApiBackend.Application.UseCases.Expresss;
 using GixtApiBackend.Application.UseCases.Jobs;
 using GixtApiBackend.Application.UseCases.Evidence;
 using GixtApiBackend.Application.UseCases.Paymentss;
+using GixtApiBackend.Application.UseCases.Review;
+using GixtApiBackend.Infraestructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -91,6 +91,7 @@ builder.Services.AddScoped<IExpressRepository, ExpressRepository>();
 builder.Services.AddScoped<IJobRepository, JobRepository>();
 builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
 builder.Services.AddScoped<IEvidenceRepository, EvidenceRepository>();
+builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
 
 // =======================================================
 // ?? USE CASES - USERS
@@ -205,6 +206,12 @@ builder.Services.AddScoped<GetJobsByWorkerId>();
 builder.Services.AddScoped<GetReviewJobById>();
 builder.Services.AddScoped<AceptDiagnostic>();
 
+// =======================================================
+// ?? USE CASES - Jobs
+// =======================================================
+builder.Services.AddScoped<CreateReview>();
+builder.Services.AddScoped<GetReviewById>();
+builder.Services.AddScoped<GetReviewWorkerById>();
 // =======================================================
 // ?? JWT
 // =======================================================

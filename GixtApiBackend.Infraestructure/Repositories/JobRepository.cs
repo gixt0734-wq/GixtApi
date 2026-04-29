@@ -2,14 +2,14 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using System.IO;
-using GixtApiBackend.Infrastructure;
+using GixtApiBackend.Infraestructure;
 using GixtApiBackend.Application.Interfaces;
 using GixtApiBackend.Application.DTos;
 using GixtApiBackend.Domain.Entities;
 using GixtApiBackend.Infraestructure;
 
 
-namespace GixtApiBackend.Infrastructure.Repositories
+namespace GixtApiBackend.Infraestructure.Repositories
 {
     public class JobRepository : IJobRepository
     {
@@ -204,7 +204,11 @@ namespace GixtApiBackend.Infrastructure.Repositories
                         .Where(e => e.job_id == t.job_id)
                         .Select(e => baseUrl + e.image_url)
                         .ToList(),
-
+                    Review = _context.reviews
+                        .Any(f =>
+                            f.job_id == t.job_id  &&
+                            f.is_active == true
+                        ),
                     t.job_date,
                     t.job_time,
                     t.description,

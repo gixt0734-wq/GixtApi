@@ -1,13 +1,13 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
-using GixtApiBackend.Infrastructure;
+using GixtApiBackend.Infraestructure;
 using GixtApiBackend.Application.Interfaces;
 using GixtApiBackend.Application.DTos;
 using GixtApiBackend.Domain.Entities;
 
 
-namespace GixtApi.Infrastructure.Repositories
+namespace GixtApi.Infraestructure.Repositories
 {
     public class AdvertisementRepository : IAdvertisementRepository
     {

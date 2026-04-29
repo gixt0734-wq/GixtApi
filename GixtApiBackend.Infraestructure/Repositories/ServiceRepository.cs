@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using System.IO;
-using GixtApiBackend.Infrastructure;
+using GixtApiBackend.Infraestructure;
 using GixtApiBackend.Application.Interfaces;
 using GixtApiBackend.Application.DTos;
 using GixtApiBackend.Domain.Entities;
@@ -11,7 +11,7 @@ using SixLabors.ImageSharp.Processing;
 using SixLabors.ImageSharp.Formats.Webp;
 using GixtApiBackend.Infraestructure;
 
-namespace GixtApi.Infrastructure.Repositories
+namespace GixtApi.Infraestructure.Repositories
 {
     public class ServiceRepository : IServiceRepository
     {
@@ -223,6 +223,29 @@ namespace GixtApi.Infrastructure.Repositories
                         }
                     ).FirstOrDefault(),
 
+                    Review =( 
+                     from j in _context.jobs
+                     join r in _context.reviews on j.job_id equals r.job_id
+                     where j.service_id == s.service_id
+                     select new
+                     {
+                         r.job_id,
+                         r.rating,
+                         r.comment,
+                         Image = string.IsNullOrEmpty(r.image_url) ? null : baseUrl + r.image_url,
+                         client = (
+                         from c in _context.users
+                         where c.user_id == r.client_id
+                         select new
+                         {
+                             c.username,
+                             Image = string.IsNullOrEmpty(c.image_url)
+                                     ? null
+                                     : baseUrl + c.image_url
+                         }
+                         ).FirstOrDefault()
+
+                     }).ToList(),
                     Category = c.name,
 
                     Image = string.IsNullOrEmpty(s.image_url)

@@ -1,4 +1,4 @@
-﻿using GixtApiBackend.Infrastructure;
+﻿using GixtApiBackend.Infraestructure;
 using Microsoft.EntityFrameworkCore;
 
 namespace GixtApi.Middlewares

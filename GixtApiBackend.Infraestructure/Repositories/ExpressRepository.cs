@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using System.IO;
-using GixtApiBackend.Infrastructure;
+using GixtApiBackend.Infraestructure;
 using GixtApiBackend.Application.Interfaces;
 using GixtApiBackend.Application.DTos;
 using GixtApiBackend.Domain.Entities;
@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using FirebaseAdmin.Messaging;
 
 
-namespace GixtApiBackend.Infrastructure.Repositories
+namespace GixtApiBackend.Infraestructure.Repositories
 {
     public class ExpressRepository : IExpressRepository
     {
@@ -140,7 +140,11 @@ namespace GixtApiBackend.Infrastructure.Repositories
                         .Where(c => c.job_id == e.express_id)
                         .Select(c => baseUrl + c.image_url)
                         .ToList(),
-
+                    Review = _context.reviews
+                    .Any(f =>
+                        f.job_id == e.express_id &&
+                        f.is_active == true
+                    ),
                     e.job_date,
                     e.job_time,
                     e.latitude,

@@ -1,13 +1,13 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using GixtApiBackend.Infrastructure;
+using GixtApiBackend.Infraestructure;
 using GixtApiBackend.Application.Interfaces;
 using GixtApiBackend.Application.DTos;
 using GixtApiBackend.Domain.Entities;
 using Microsoft.AspNetCore.Http;
 
 
-namespace GixtApiBackend.Infrastructure.Repositories
+namespace GixtApiBackend.Infraestructure.Repositories
 {
     public class CategoryRepository : ICategoryRepository
     {
