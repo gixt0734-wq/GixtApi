@@ -486,12 +486,11 @@ namespace GixtApi.Infraestructure.Repositories
                    from e in _context.evidence 
                    join j in _context.jobs on e.job_id equals j.job_id
                    where j.worker_id == w.worker_id
-                   select new
-                   {
-                       image = string.IsNullOrEmpty(e.image_url)
+                   select
+                        string.IsNullOrEmpty(e.image_url)
                                      ? null
                                      : baseUrl + e.image_url
-                   }
+                   
                    ).ToList()
                }
             ).FirstOrDefaultAsync();
