@@ -26,5 +26,6 @@ namespace GixtApiBackend.Domain.Entities
         public int rol_id { get; set; }
         public bool terms {  get; set; }
         public bool is_active { get; set; }
+        public DateTime created_at { get; set; }
     }
 }

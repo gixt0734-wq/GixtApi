@@ -22,7 +22,8 @@ namespace GixtApiBackend.Domain.Entities
         public decimal longitude { get; set; }
         public decimal km_cost { get; set; }
         public double range_km { get; set; }
-        public bool is_active { get; set; } 
+        public bool is_active { get; set; }
+        public DateTime created_at { get; set; }
 
     }
 }

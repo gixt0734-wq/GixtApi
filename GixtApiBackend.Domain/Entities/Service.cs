@@ -23,5 +23,6 @@ namespace GixtApiBackend.Domain.Entities
         public Guid worker_id { get; set; }
         public int category_id { get; set; }
         public bool is_active { get; set; }
+        public DateTime created_at { get; set; }
     }
 }

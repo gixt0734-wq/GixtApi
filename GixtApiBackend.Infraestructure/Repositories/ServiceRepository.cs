@@ -201,6 +201,7 @@ namespace GixtApi.Infraestructure.Repositories
                     s.rating,
                     s.description,
                     s.duration_hours,
+                    registered = FechaHelper.GetTiempoRelativo(s.created_at),
 
                     Worker = (
                         from w in _context.workers
@@ -232,6 +233,7 @@ namespace GixtApi.Infraestructure.Repositories
                          r.job_id,
                          r.rating,
                          r.comment,
+                         registrado = FechaHelper.GetTiempoRelativo(r.created_at),
                          Image = string.IsNullOrEmpty(r.image_url) ? null : baseUrl + r.image_url,
                          client = (
                          from c in _context.users

@@ -324,7 +324,6 @@ namespace GixtApi.Infraestructure.Repositories
             }
         }
 
-
         public async Task DeleteUserAsync(Guid id)
         {
             var user = await _context.users.FindAsync(id);
@@ -430,6 +429,7 @@ namespace GixtApi.Infraestructure.Repositories
                     s.gender,
                     s.birth_date,
                     s.email,
+                    registered = FechaHelper.GetTiempoRelativo(s.created_at)
                 }
             ).FirstOrDefaultAsync();
 

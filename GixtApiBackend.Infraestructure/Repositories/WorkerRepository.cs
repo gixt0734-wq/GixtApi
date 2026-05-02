@@ -403,6 +403,7 @@ namespace GixtApi.Infraestructure.Repositories
                     s.gender,
                     s.birth_date,
                     s.email,
+                    registered = FechaHelper.GetTiempoRelativo(s.created_at),
                 }
             ).FirstOrDefaultAsync();
 
@@ -457,6 +458,8 @@ namespace GixtApi.Infraestructure.Repositories
                    u.username,
                    u.first_name,
                    u.last_name,
+                   u.gender,
+                   registered = FechaHelper.GetTiempoRelativo(u.created_at),
                    Image = string.IsNullOrEmpty(u.image_url)
                                      ? null
                                      : baseUrl + u.image_url,
@@ -466,6 +469,7 @@ namespace GixtApi.Infraestructure.Repositories
                    {
                        r.rating,
                        r.comment,
+                       registered = FechaHelper.GetTiempoRelativo(r.created_at),
                        client = (
                          from c in _context.users
                          where c.user_id == r.client_id
