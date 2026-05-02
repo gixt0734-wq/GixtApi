@@ -155,7 +155,18 @@ namespace GixtApiBackend.Infraestructure.Repositories
                                 : baseUrl + u.image_url
                         }
                     ).FirstOrDefault(),
-
+                    payment = _context.payment
+                        .Where(c => c.job_id == t.job_id)
+                        .Select(c => new
+                        {
+                            c.materials,
+                            c.labor_cost,
+                            c.km_cost,
+                            c.payment_method,
+                            c.payment_status,
+                            c.iva,
+                            c.total
+                        }).FirstOrDefault(),
                     location = _context.locations
                         .Where(l => l.location_id == t.location_id)
                         .Select(l => new
