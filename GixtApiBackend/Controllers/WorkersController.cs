@@ -19,6 +19,7 @@ namespace GixtApiBackend.Controllers
         private readonly DeleteWorker _deleteWorker;
         private readonly GetWorkerById _getWorkerById;
         private readonly GetInfoWorkerById _getInfoWorkerById;
+        private readonly GetProfileWorker _getProfileWorker;
 
         public WorkersController(
             CreateWorker createWorker,
@@ -28,7 +29,8 @@ namespace GixtApiBackend.Controllers
             UpdateWorker updateWorker,
             DeleteWorker deleteWorker,
             GetWorkerById getWorkerById,
-            UpdateInfoWorker updateInfoWorker
+            UpdateInfoWorker updateInfoWorker,
+            GetProfileWorker getProfileWorker
 
         )
         {
@@ -40,6 +42,7 @@ namespace GixtApiBackend.Controllers
             _deleteWorker = deleteWorker;
             _getWorkerById = getWorkerById;
             _updateInfoWorker = updateInfoWorker;
+            _getProfileWorker = getProfileWorker;
 
         }
 
@@ -103,6 +106,17 @@ namespace GixtApiBackend.Controllers
         public async Task<IActionResult> GetInfoById(Guid id)
         {
             var user = await _getInfoWorkerById.Execute(id);
+
+            if (user == null)
+                return NotFound();
+
+            return Ok(user);
+        }
+
+        [HttpGet("profile/{id}")]
+        public async Task<IActionResult> GetProfileWorker(Guid id)
+        {
+            var user = await _getProfileWorker.Execute(id);
 
             if (user == null)
                 return NotFound();

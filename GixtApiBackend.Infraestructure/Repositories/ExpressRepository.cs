@@ -188,6 +188,7 @@ namespace GixtApiBackend.Infraestructure.Repositories
                         where s.express_id== e.express_id
                         select new
                         {
+                            u.user_id,
                             u.first_name,
                             u.username,
                             w.rating,

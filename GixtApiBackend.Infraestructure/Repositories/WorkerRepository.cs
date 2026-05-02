@@ -56,7 +56,7 @@ namespace GixtApi.Infraestructure.Repositories
 
                 string username = $"{firstName} {lastName}";
                 user.username = username;
-            
+
 
                 if (dto.imagen != null && dto.imagen.Length > 0)
                 {
@@ -244,7 +244,7 @@ namespace GixtApi.Infraestructure.Repositories
                     longitude = dto.longitude,
                     range_km = dto.range_km,
                     km_cost = dto.km_cost,
-                   
+
 
                 };
 
@@ -258,7 +258,7 @@ namespace GixtApi.Infraestructure.Repositories
                 await _context.workers.AddAsync(worker);
                 await _context.SaveChangesAsync();
 
-               
+
             }
             catch (Exception)
             {
@@ -276,7 +276,7 @@ namespace GixtApi.Infraestructure.Repositories
                 await _context.SaveChangesAsync();
             }
         }
-        
+
         public async Task UpdateWorkerAsync(UserUpdateDTO dto)
         {
 
@@ -383,7 +383,7 @@ namespace GixtApi.Infraestructure.Repositories
             return users;
         }
 
-        public async Task<Object?> GetWorkerByIdAsync(Guid id)
+        public async Task<object?> GetWorkerByIdAsync(Guid id)
         {
             var request = _httpContextAccessor.HttpContext.Request;
             var baseUrl = $"{request.Scheme}://{request.Host}";
@@ -410,10 +410,10 @@ namespace GixtApi.Infraestructure.Repositories
                 return null;
 
             return result;
-            
+
         }
 
-        public async Task<Object?> GetInfoWorkerByIdAsync(Guid id)
+        public async Task<object?> GetInfoWorkerByIdAsync(Guid id)
         {
             var request = _httpContextAccessor.HttpContext.Request;
             var baseUrl = $"{request.Scheme}://{request.Host}";
@@ -440,6 +440,62 @@ namespace GixtApi.Infraestructure.Repositories
 
         }
 
+        public async Task<object?> GetProfileWorker(Guid id)
+        {
+            var request = _httpContextAccessor.HttpContext.Request;
+            var baseUrl = $"{request.Scheme}://{request.Host}";
+            var result = await (
+               from w in _context.workers
+               join u in _context.users on w.user_id equals u.user_id
+               where w.user_id == id
+               select new
+               {
+                   w.user_id,
+                   w.description,
+                   w.rating,
+                   w.city,
+                   u.username,
+                   u.first_name,
+                   u.last_name,
+                   Image = string.IsNullOrEmpty(u.image_url)
+                                     ? null
+                                     : baseUrl + u.image_url,
+                   Review =(
+                   from r in _context.reviews_workers where r.worker_id == w.worker_id 
+                   select new
+                   {
+                       r.rating,
+                       r.comment,
+                       client = (
+                         from c in _context.users
+                         where c.user_id == r.client_id
+                         select new
+                         {
+                             c.username,
+                             Image = string.IsNullOrEmpty(c.image_url)
+                                     ? null
+                                     : baseUrl + c.image_url
+                         }
+                         ).FirstOrDefault()
+                   }).ToList(),
+                   Evidence = (
+                   from e in _context.evidence 
+                   join j in _context.jobs on e.job_id equals j.job_id
+                   where j.worker_id == w.worker_id
+                   select new
+                   {
+                       image = string.IsNullOrEmpty(e.image_url)
+                                     ? null
+                                     : baseUrl + e.image_url
+                   }
+                   ).ToList()
+               }
+            ).FirstOrDefaultAsync();
 
+            if (result == null)
+                return null;
+
+            return result;
+        }
     }
 }

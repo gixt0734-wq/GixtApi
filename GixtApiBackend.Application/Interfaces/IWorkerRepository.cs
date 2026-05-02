@@ -20,6 +20,7 @@ namespace GixtApiBackend.Application.Interfaces
         Task<IEnumerable<User>> GetAllWorkersAsync();
         Task<object> GetWorkerByIdAsync(Guid id);
         Task<object> GetInfoWorkerByIdAsync(Guid id);
+        Task<object> GetProfileWorker(Guid id);
     }
 
 }

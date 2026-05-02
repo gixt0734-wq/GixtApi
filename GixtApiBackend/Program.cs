@@ -114,7 +114,7 @@ builder.Services.AddScoped<UpdateInfoWorker>();
 builder.Services.AddScoped<DeleteWorker>();
 builder.Services.AddScoped<GetWorkerById>();
 builder.Services.AddScoped<GetInfoWorkerById>();
-
+builder.Services.AddScoped<GetProfileWorker>();
 // =======================================================
 // ?? USE CASES - Advertisement
 // =======================================================
