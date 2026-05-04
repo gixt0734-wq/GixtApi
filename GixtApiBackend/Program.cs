@@ -141,6 +141,7 @@ builder.Services.AddScoped<DeleteService>();
 builder.Services.AddScoped<GetServiceById>();
 builder.Services.AddScoped<GetServiceByIdWorker>();
 builder.Services.AddScoped<GetServiceByCategory>();
+builder.Services.AddScoped<GetServiceLocation>();
 
 // =======================================================
 // ?? USE CASES - Services Favorites

@@ -15,7 +15,7 @@ namespace GixtApiBackend.Application.Interfaces
         Task CreateServiceAsync(ServiceDTO dto);
         Task UpdateServiceAsync(Service service);
         Task DeleteServiceAsync(Guid id);
-
+        Task<object> GetAllServicesLocationAsync(decimal latitude,decimal longitude,double rangoKm);
         Task<IEnumerable<object>> GetAllServicesAsync();
         Task<object> GetServiceByIdAsync(Guid id, Guid userId);
         Task<object>  GetServiceByIdWorkerAsync (Guid id);

@@ -18,7 +18,7 @@ namespace GixtApiBackend.Controllers
         private readonly GetServiceById _getServiceById;
         private readonly GetServiceByIdWorker _getServiceByIdWorker;
         private readonly GetServiceByCategory _getServiceByCategory;
-
+        private readonly GetServiceLocation _getServiceLocation;
         public ServicesController(
             CreateService createService,
             GetService getServices,
@@ -26,7 +26,8 @@ namespace GixtApiBackend.Controllers
             DeleteService deleteService,
             GetServiceById getServiceById,
             GetServiceByIdWorker getServiceByIdWorker,
-            GetServiceByCategory getServiceByCategory
+            GetServiceByCategory getServiceByCategory,
+            GetServiceLocation getServiceLocation
         )
         {
             _createService = createService;
@@ -36,6 +37,7 @@ namespace GixtApiBackend.Controllers
             _getServiceById = getServiceById;
             _getServiceByIdWorker = getServiceByIdWorker;
             _getServiceByCategory = getServiceByCategory;
+            _getServiceLocation = getServiceLocation;
         }
 
         [HttpPost]
@@ -45,10 +47,18 @@ namespace GixtApiBackend.Controllers
             return Ok(new { message = "Service added successfully" });
         }
 
+        //[HttpGet]
+        //public async Task<IActionResult> Get()
+        //{
+        //    var services = await _getServices.Execute();
+        //    return Ok(services);
+
+        //}
+
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> GetLongitude(decimal latitude,decimal longitude,double rangoKm)
         {
-            var services = await _getServices.Execute();
+            var services = await _getServiceLocation.Execute(latitude,longitude,rangoKm);
             return Ok(services);
         }
 
