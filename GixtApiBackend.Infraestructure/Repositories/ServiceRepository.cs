@@ -182,10 +182,7 @@ namespace GixtApi.Infraestructure.Repositories
             return result;
         }
 
-        public async Task<object> GetAllServicesLocationAsync(
-        decimal latitude,
-        decimal longitude,
-        double rangoKm)
+        public async Task<object> GetAllServicesLocationAsync(decimal latitude, decimal longitude,double rangoKm)
         {
             var request = _httpContextAccessor.HttpContext.Request;
             var baseUrl = $"{request.Scheme}://{request.Host}";
@@ -206,7 +203,8 @@ namespace GixtApi.Infraestructure.Repositories
                 where s.is_active == true
                     && c.is_active == true
                     && u.is_active == true
-
+                    && w.is_active == true
+                    
                     // 🔹 AQUÍ se queda en decimal (usa índice)
                     && w.latitude >= latitude - (decimal)rangoLat
                     && w.latitude <= latitude + (decimal)rangoLat
@@ -221,17 +219,17 @@ namespace GixtApi.Infraestructure.Repositories
                     u.first_name,
                     s.rating,
                     s.description,
-
+                    s.category_id,
                     w.latitude,
                     w.longitude,
 
                     // 🔥 convertir a double dentro del cálculo
                     Distancia = 6371 * 2 * Math.Asin(Math.Sqrt(
-    Math.Pow(Math.Sin((lat - (double)w.latitude) * Math.PI / 180 / 2), 2) +
-    Math.Cos(lat * Math.PI / 180) *
-    Math.Cos((double)w.latitude * Math.PI / 180) *
-    Math.Pow(Math.Sin((lon - (double)w.longitude) * Math.PI / 180 / 2), 2)
-)),
+                        Math.Pow(Math.Sin((lat - (double)w.latitude) * Math.PI / 180 / 2), 2) +
+                        Math.Cos(lat * Math.PI / 180) *
+                        Math.Cos((double)w.latitude * Math.PI / 180) *
+                        Math.Pow(Math.Sin((lon - (double)w.longitude) * Math.PI / 180 / 2), 2)
+                    )),
 
                     UserImage = string.IsNullOrEmpty(u.image_url)
                         ? null
@@ -246,6 +244,9 @@ namespace GixtApi.Infraestructure.Repositories
             )
             .Where(x => x.Distancia <= rangoKm)
             .OrderBy(x => x.Distancia)
+            .OrderBy(x => x.rating)
+            .GroupBy(x => x.category_id)
+            .Select(g => g.First())
             .ToListAsync();
 
             return result;
@@ -380,19 +381,33 @@ namespace GixtApi.Infraestructure.Repositories
             return result;
         }
 
-        public async Task<object?> GetServicesByCategoryAsync(int id, int pageNumber = 1)
+        public async Task<object?> GetServicesByCategoryAsync(int id, decimal latitude, decimal longitude, double rangoKm, int pageNumber = 1)
         {
             const int pageSize = 10;
 
             var request = _httpContextAccessor.HttpContext.Request;
             var baseUrl = $"{request.Scheme}://{request.Host}";
+            double lat = (double)latitude;
+            double lon = (double)longitude;
+
+            double rangoLat = rangoKm / 111.0;
+            double rangoLon = rangoKm / (111.0 * Math.Cos(lat * Math.PI / 180));
 
             var query =
                 from s in _context.services
                 join w in _context.workers on s.worker_id equals w.worker_id
                 join u in _context.users on w.user_id equals u.user_id
                 join c in _context.categories on s.category_id equals c.category_id
-                where s.is_active == true && s.category_id == id && c.is_active == true && u.is_active == true
+                 where s.is_active == true
+                    && c.is_active == true
+                    && u.is_active == true
+                    && w.is_active == true
+                    && s.category_id == id
+                    // 🔹 AQUÍ se queda en decimal (usa índice)
+                    && w.latitude >= latitude - (decimal)rangoLat
+                    && w.latitude <= latitude + (decimal)rangoLat
+                    && w.longitude >= longitude - (decimal)rangoLon
+                    && w.longitude <= longitude + (decimal)rangoLon
                 select new
                 {
                     s.service_id,
@@ -401,6 +416,13 @@ namespace GixtApi.Infraestructure.Repositories
                     u.first_name,
                     s.rating,
                     s.description,
+                    Distancia = 6371 * 2 * Math.Asin(Math.Sqrt(
+                        Math.Pow(Math.Sin((lat - (double)w.latitude) * Math.PI / 180 / 2), 2) +
+                        Math.Cos(lat * Math.PI / 180) *
+                        Math.Cos((double)w.latitude * Math.PI / 180) *
+                        Math.Pow(Math.Sin((lon - (double)w.longitude) * Math.PI / 180 / 2), 2)
+                    )),
+
                     UserImage = string.IsNullOrEmpty(u.image_url)
                                 ? null
                                 : baseUrl + u.image_url,
@@ -413,6 +435,9 @@ namespace GixtApi.Infraestructure.Repositories
             var totalItems = await query.CountAsync();
 
             var result = await query
+                .Where(x => x.Distancia <= rangoKm)
+                .OrderBy(x => x.Distancia)
+                .OrderBy(x => x.rating)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();

@@ -85,10 +85,10 @@ namespace GixtApiBackend.Controllers
         }
 
         [HttpGet("category/{id}")]
-        public async Task<IActionResult> GetByCategory(int id, int pageNumber = 1)
+        public async Task<IActionResult> GetByCategory(int id, decimal latitude, decimal longitude, double rangoKm, int pageNumber = 1)
         {
             
-            var service = await _getServiceByCategory.Execute(id, pageNumber);
+            var service = await _getServiceByCategory.Execute(id, latitude,longitude,rangoKm, pageNumber);
                return Ok(service);
             
           

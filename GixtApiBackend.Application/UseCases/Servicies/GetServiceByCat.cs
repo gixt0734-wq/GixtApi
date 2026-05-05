@@ -18,9 +18,9 @@ namespace GixtApiBackend.Application.UseCases.Services
             _repo = repo;
         }
 
-        public async Task<Object?> Execute(int id, int pageNumber = 1)
+        public async Task<Object?> Execute(int id, decimal latitude, decimal longitude, double rangoKm, int pageNumber = 1)
         {
-            return await _repo.GetServicesByCategoryAsync(id , pageNumber);
+            return await _repo.GetServicesByCategoryAsync(id , latitude,longitude,rangoKm, pageNumber);
         }
     }
 }

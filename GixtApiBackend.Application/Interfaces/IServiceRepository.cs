@@ -19,7 +19,7 @@ namespace GixtApiBackend.Application.Interfaces
         Task<IEnumerable<object>> GetAllServicesAsync();
         Task<object> GetServiceByIdAsync(Guid id, Guid userId);
         Task<object>  GetServiceByIdWorkerAsync (Guid id);
-        Task<object> GetServicesByCategoryAsync(int id, int pageNumber = 1);
+        Task<object> GetServicesByCategoryAsync(int id, decimal latitude, decimal longitude, double rangoKm, int pageNumber = 1);
     }
 
 }
