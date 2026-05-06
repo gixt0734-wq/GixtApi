@@ -61,7 +61,8 @@ namespace GixtApiBackend.Infraestructure.Repositories
             // 3. Buscar en express primero, luego en services
             Guid? workerId = null;
 
-            var express = await _context.express.FindAsync(dto.id);
+            var express = await _context.express
+                .FirstOrDefaultAsync(x => x.express_id == dto.id);
 
             if (express != null)
             {
@@ -69,7 +70,7 @@ namespace GixtApiBackend.Infraestructure.Repositories
             }
             else
             {
-                var jobs = await _context.jobs.FindAsync(dto.id);
+                var jobs = await _context.jobs.FirstOrDefaultAsync(x => x.job_id == dto.id);
 
                 if (jobs != null)
                 {
