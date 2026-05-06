@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 public class FcmService
 {
     private readonly AppDbContext _context;
-  
+
 
     public FcmService(
         AppDbContext context)
@@ -33,7 +33,7 @@ public class FcmService
         await SendNotificationAsync(
                 await user,
                 title,
-               body,type
+               body, type
             );
     }
     //Notifiaciones hacia trabajadores
@@ -55,7 +55,7 @@ public class FcmService
         await SendNotificationAsync(
                 await user,
                 title,
-               body,type
+               body, type
             );
     }
 
@@ -63,23 +63,33 @@ public class FcmService
     //Propuestas de trabajadores
     public async Task sendNotificationByExpress(Guid id, String username, Guid worker_id, string title, string body, decimal km_cost, decimal labor_price)
     {
-        var user = (
+        var user = await (
               from e in _context.express
               join u in _context.users on e.client_id equals u.user_id
               join s in _context.sessions
               on u.user_id equals s.user_id
               where e.express_id == id && u.is_active == true
-              select s.token_fcm
+              select new { u.image_url, s.token_fcm }
               ).FirstOrDefaultAsync();
 
-        if (await user == null)
+        var worker = await (
+              from e in _context.express
+              join w in _context.workers on e.worker_id equals w.worker_id
+              join u in _context.users on w.user_id equals u.user_id
+              join s in _context.sessions
+              on u.user_id equals s.user_id
+              where e.express_id == id && u.is_active == true
+              select new { u.image_url, s.token_fcm }
+              ).FirstOrDefaultAsync();
+
+        if (user == null)
             return;
 
 
-        await SendNotificationExpressAsync(await user, id, worker_id, username,labor_price, km_cost, title, body);
+        await SendNotificationExpressAsync(user.token_fcm, worker.image_url, id, worker_id, username, labor_price, km_cost, title, body);
     }
     // Notificaciones de Nuevos Express hacia trabajadores
-    public async Task SendNotificationByExpress(int id_category, string title, string body, Guid serviceId)
+    public async Task SendNotificationByExpress(int id_category, string title, string body, Guid serviceId, Guid client_id)
     {
         var tokens = await (
             from s in _context.services
@@ -96,10 +106,16 @@ public class FcmService
         .Distinct()
         .ToListAsync();
 
+        var user = await (
+              from u in _context.users
+              where u.user_id == client_id && u.is_active == true
+              select new { u.image_url, u.username }
+              ).FirstOrDefaultAsync();
+
         if (tokens.Count == 0)
             return;
 
-        await SendNotificationsAsync(tokens, title, body, serviceId);
+        await SendNotificationsAsync(tokens, user.image_url, user.username, title, body, serviceId);
     }
 
 
@@ -164,6 +180,7 @@ public class FcmService
 
     public async Task SendNotificationExpressAsync(
         string token,
+        string img,
         Guid expressid,
         Guid workerid,
         string username,
@@ -186,6 +203,7 @@ public class FcmService
             {
                 { "type", "express" },
                 {"username" , username },
+                {"image", img },
                 { "expressid",expressid.ToString() },
                 {"workerid",workerid.ToString() },
                 {"labor_price",labor_price.ToString() },
@@ -230,6 +248,8 @@ public class FcmService
     // Noptifiacaciones hacia trabajadores que tengan un servicio registrado con el id enviado
     public async Task SendNotificationsAsync(
         List<string> tokens,
+        string img,
+        string username,
         string title,
         string body,
         Guid serviceId)
@@ -247,6 +267,8 @@ public class FcmService
             Data = new Dictionary<string, string>()
             {
                 { "type", "service" },
+                {"img",img },
+                {"username",username },
                 { "serviceId", serviceId.ToString()},
                 { "serviceType","express"}, 
             },

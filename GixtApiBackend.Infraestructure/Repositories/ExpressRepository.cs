@@ -78,7 +78,8 @@ namespace GixtApiBackend.Infraestructure.Repositories
                    job.category_id,
                    "Alguien necesita tu ayuda",
                    "Tienes un nuevo servicio express, verificalo",
-                   job.express_id
+                   job.express_id,
+                   job.client_id
                );
             return job.express_id;
         }
