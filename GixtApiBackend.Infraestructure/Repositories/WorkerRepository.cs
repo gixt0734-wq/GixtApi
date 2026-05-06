@@ -389,6 +389,7 @@ namespace GixtApi.Infraestructure.Repositories
             var baseUrl = $"{request.Scheme}://{request.Host}";
             var result = await (
                 from s in _context.users
+                join w in _context.workers on s.user_id equals w.user_id
                 where s.is_active == true && s.user_id == id
                 select new
                 {
@@ -399,6 +400,14 @@ namespace GixtApi.Infraestructure.Repositories
                     Imagen = string.IsNullOrEmpty(s.image_url)
                             ? null
                             : baseUrl + s.image_url,
+                    workers = (_context.jobs
+                    .Where(t => t.worker_id == w.worker_id)
+                    .Count()) + (_context.express
+                    .Where(t => t.worker_id == w.worker_id)
+                    .Count()),
+                    services =(_context.services)
+                    .Where(s => s.worker_id == w.worker_id)
+                    .Count(),
                     s.phone,
                     s.gender,
                     s.birth_date,
@@ -463,6 +472,14 @@ namespace GixtApi.Infraestructure.Repositories
                    Image = string.IsNullOrEmpty(u.image_url)
                                      ? null
                                      : baseUrl + u.image_url,
+                   workers = (_context.jobs
+                    .Where(t => t.worker_id == w.worker_id)
+                    .Count()) + (_context.express
+                    .Where(t => t.worker_id == w.worker_id)
+                    .Count()),
+                   service = (_context.services)
+                    .Where(s => s.worker_id == w.worker_id)
+                    .Count(),
                    Review =(
                    from r in _context.reviews_workers where r.worker_id == w.worker_id 
                    select new

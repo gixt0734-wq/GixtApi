@@ -220,9 +220,7 @@ namespace GixtApi.Infraestructure.Repositories
                     s.rating,
                     s.description,
                     s.category_id,
-                    w.latitude,
-                    w.longitude,
-
+                    w.city,
                     // 🔥 convertir a double dentro del cálculo
                     Distancia = 6371 * 2 * Math.Asin(Math.Sqrt(
                         Math.Pow(Math.Sin((lat - (double)w.latitude) * Math.PI / 180 / 2), 2) +
@@ -416,6 +414,7 @@ namespace GixtApi.Infraestructure.Repositories
                     u.first_name,
                     s.rating,
                     s.description,
+                    w.city,
                     Distancia = 6371 * 2 * Math.Asin(Math.Sqrt(
                         Math.Pow(Math.Sin((lat - (double)w.latitude) * Math.PI / 180 / 2), 2) +
                         Math.Cos(lat * Math.PI / 180) *

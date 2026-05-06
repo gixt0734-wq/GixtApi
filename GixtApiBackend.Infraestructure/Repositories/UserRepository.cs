@@ -412,7 +412,9 @@ namespace GixtApi.Infraestructure.Repositories
         public async Task<Object?> GetUserByIdAsync(Guid id)
         {
             var request = _httpContextAccessor.HttpContext.Request;
-            var baseUrl = $"{request.Scheme}://{request.Host}";
+            var baseUrl = $"{request.Scheme}://{request.Host}"; 
+
+
             var result = await (
                 from s in _context.users
                 where s.is_active == true && s.user_id == id
@@ -429,6 +431,12 @@ namespace GixtApi.Infraestructure.Repositories
                     s.gender,
                     s.birth_date,
                     s.email,
+                     workers = ( _context.jobs
+                    .Where(t => t.client_id == s.user_id)
+                    .Count()) + (_context.express
+                    .Where(t => t.client_id == s.user_id)
+                    .Count()),
+
                     registered = FechaHelper.GetTiempoRelativo(s.created_at)
                 }
             ).FirstOrDefaultAsync();
