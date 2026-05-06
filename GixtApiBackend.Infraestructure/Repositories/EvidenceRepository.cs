@@ -100,6 +100,7 @@ namespace GixtApiBackend.Infraestructure.Repositories
                 );
 
             }
+            await _context.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<Payment>> GetAllCostAsync()
