@@ -617,29 +617,6 @@ namespace GixtApiBackend.Infraestructure.Repositories
 
                     break;
 
-                case "arrived":
-                    existing.job_status = "diagnosing";
-
-                    await _fcmService.SendNotificationByUser(
-                            existing.client_id,
-                            "El trabajador ya diagnosito ",
-                            $"El trabajador de '{existing.problem}' ya diagnositico tu problema.", "Job"
-                    );
-
-                    break;
-
-                case "in_progress":
-
-                    existing.job_status = "finalized";
-
-                    await _fcmService.SendNotificationByUser(
-                        existing.client_id,
-                        "Servicio finalizado 🎉",
-                        $"El servicio '{existing.problem}' ha sido completado.", "Express"
-                    );
-
-                    break;
-
                 case "canceled":
 
                     existing.job_status = "canceled";

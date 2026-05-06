@@ -63,6 +63,35 @@ namespace GixtApiBackend.Infraestructure.Repositories
                 await _context.evidence.AddRangeAsync(evidencesToAdd);
                 await _context.SaveChangesAsync();
             }
+
+            if (dto.is_express)
+            {
+                var existing = await _context.express.FindAsync(dto.job_id);
+                if (existing == null)
+                    throw new Exception("Trabajo no encontrado");
+                existing.job_status = "finalized";
+
+                await _fcmService.SendNotificationByUser(
+                    existing.client_id,
+                    "Servicio finalizado 🎉",
+                    $"El servicio '{existing.problem}' ha sido completado.", "Express"
+                );
+            }
+            else
+            {
+                var existing = await _context.jobs.FindAsync(dto.job_id);
+                if (existing == null)
+                    throw new Exception("Trabajo no encontrado");
+
+                existing.job_status = "finalized";
+
+                await _fcmService.SendNotificationByUser(
+                    existing.client_id,
+                    "Servicio finalizado 🎉",
+                    $"El servicio '{existing.problem}' ha sido completado.", "Express"
+                );
+
+            }
         }
 
         public async Task<IEnumerable<Payment>> GetAllCostAsync()

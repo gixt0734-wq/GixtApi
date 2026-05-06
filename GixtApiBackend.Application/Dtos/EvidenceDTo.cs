@@ -18,5 +18,6 @@ namespace GixtApiBackend.Application.DTos
         [FromForm(Name = "images")]
         public List<IFormFile> images { get; set; }
         public Guid job_id { get; set; }
+        public bool is_express { get; set; }
     }
 }
