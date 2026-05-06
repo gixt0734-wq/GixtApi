@@ -35,7 +35,7 @@ namespace GixtApi.Controllers
                 await _updatePayment.Execute(dto);
                 return Ok(new { message = "Cost created successfully" });
             }
-            catch (InvalidOperationException ex)
+            catch (Exception ex)
             {
                 return BadRequest(new { message = ex.Message });
             }
