@@ -45,7 +45,7 @@ namespace GixtApiBackend.Infraestructure.Repositories
                 await _fcmService.SendNotificationByUser(
                         express.client_id,
                         "El trabajador ya diagnosito ",
-                        $"El trabajador de '{express.problem}' ya diagnositico tu problema.", "Job"
+                        $"El trabajador de '{express.problem}' ya diagnositico tu problema.", "Express"
                 );
             }
             else

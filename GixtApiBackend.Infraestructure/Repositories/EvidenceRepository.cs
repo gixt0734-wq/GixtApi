@@ -88,7 +88,7 @@ namespace GixtApiBackend.Infraestructure.Repositories
                 await _fcmService.SendNotificationByUser(
                     existing.client_id,
                     "Servicio finalizado 🎉",
-                    $"El servicio '{existing.problem}' ha sido completado.", "Express"
+                    $"El servicio '{existing.problem}' ha sido completado.", "Job"
                 );
 
             }
