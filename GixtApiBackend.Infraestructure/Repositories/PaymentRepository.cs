@@ -40,7 +40,7 @@ namespace GixtApiBackend.Infraestructure.Repositories
                 var express = _context.express
                 .Where(p => p.express_id == dto.job_id)
                 .FirstOrDefault();
-                if(express.description != null)
+                if(express.description_worker != null)
                 {
                     throw new Exception("Trabajo ya diagnosticado");
                     return;
