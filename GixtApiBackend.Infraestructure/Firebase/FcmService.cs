@@ -73,12 +73,11 @@ public class FcmService
               ).FirstOrDefaultAsync();
 
         var worker = await (
-              from e in _context.express
-              join w in _context.workers on e.worker_id equals w.worker_id
+              from w in _context.workers 
               join u in _context.users on w.user_id equals u.user_id
               join s in _context.sessions
               on u.user_id equals s.user_id
-              where e.express_id == id && u.is_active == true
+              where w.worker_id == worker_id && u.is_active == true
               select new { u.image_url, s.token_fcm }
               ).FirstOrDefaultAsync();
 
