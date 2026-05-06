@@ -360,6 +360,7 @@ namespace GixtApi.Infraestructure.Repositories
                     s.labor_price,
                     u.first_name,
                     s.rating,
+                    w.city,
                     s.description,
                     UserImage = string.IsNullOrEmpty(u.image_url)
                             ? null

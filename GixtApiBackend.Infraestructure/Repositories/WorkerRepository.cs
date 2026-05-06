@@ -473,9 +473,9 @@ namespace GixtApi.Infraestructure.Repositories
                                      ? null
                                      : baseUrl + u.image_url,
                    workers = (_context.jobs
-                    .Where(t => t.worker_id == w.worker_id)
+                    .Where(t => t.worker_id == w.worker_id && t.is_active == true)
                     .Count()) + (_context.express
-                    .Where(t => t.worker_id == w.worker_id)
+                    .Where(t => t.worker_id == w.worker_id && t.is_active == true)
                     .Count()),
                    service = (_context.services)
                     .Where(s => s.worker_id == w.worker_id)

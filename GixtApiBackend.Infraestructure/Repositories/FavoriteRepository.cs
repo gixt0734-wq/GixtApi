@@ -100,6 +100,7 @@ namespace GixtApiBackend.Infraestructure.Repositories
                     u.first_name,
                     s.rating,
                     s.description,
+                    w.city,
                     UserImage = string.IsNullOrEmpty(u.image_url)
                            ? null
                            : baseUrl + u.image_url,
