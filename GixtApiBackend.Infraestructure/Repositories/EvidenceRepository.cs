@@ -1,12 +1,13 @@
-﻿using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Http;
-using System.IO;
-using GixtApiBackend.Infraestructure;
+﻿using GixtApiBackend.Application.DTos;
 using GixtApiBackend.Application.Interfaces;
-using GixtApiBackend.Application.DTos;
 using GixtApiBackend.Domain.Entities;
 using GixtApiBackend.Infraestructure;
+using GixtApiBackend.Infraestructure;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using Stripe;
+using System.IO;
+using System.Threading.Tasks;
 
 
 namespace GixtApiBackend.Infraestructure.Repositories
@@ -28,8 +29,15 @@ namespace GixtApiBackend.Infraestructure.Repositories
 
         public async Task CreateEvidenceAsync(EvidenceDTO dto)
         {
-            
-          
+            var existin = await  _context.evidence
+                .Where(e=> e.job_id == dto.job_id)
+                .FirstOrDefaultAsync();
+            if (existin != null)
+            {
+                throw new Exception("Trabajo ya terminado");
+                return;
+            }
+
             if (dto.images == null || dto.images.Count == 0)
                 return;
 

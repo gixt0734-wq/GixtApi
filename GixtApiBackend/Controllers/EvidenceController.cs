@@ -34,7 +34,7 @@ namespace GixtApi.Controllers
                 await _createEvidence.Execute(dto);
                 return Ok(new { message = "Cost created successfully" });
             }
-            catch (InvalidOperationException ex)
+            catch (Exception ex)
             {
                 return BadRequest(new { message = ex.Message });
             }
