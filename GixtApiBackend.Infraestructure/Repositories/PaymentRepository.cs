@@ -33,12 +33,18 @@ namespace GixtApiBackend.Infraestructure.Repositories
                 .Where(p => p.job_id == dto.job_id)
                 .FirstOrDefault();
 
+            
+
             if (dto.isexpress)
             {
                 var express = _context.express
                 .Where(p => p.express_id == dto.job_id)
                 .FirstOrDefault();
-
+                if(express.description != null)
+                {
+                    throw new Exception("Trabajo ya diagnosticado");
+                    return;
+                }
                 express.description_worker = dto.description;
                 express.job_status = "diagnosing";
 
@@ -53,6 +59,11 @@ namespace GixtApiBackend.Infraestructure.Repositories
                 var job = _context.jobs
                 .Where(p => p.job_id == dto.job_id)
                 .FirstOrDefault();
+                if (job.description != null)
+                {
+                    throw new Exception("Trabajo ya diagnosticado");
+                    return;
+                }
 
                 job.description_worker = dto.description;
                 job.job_status = "diagnosing";
