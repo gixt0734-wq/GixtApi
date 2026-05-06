@@ -1,17 +1,19 @@
 ﻿using FirebaseAdmin.Messaging;
 using GixtApiBackend.Domain.Entities;
 using GixtApiBackend.Infraestructure;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 public class FcmService
 {
     private readonly AppDbContext _context;
-
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
     public FcmService(
-        AppDbContext context)
+        AppDbContext context, IHttpContextAccessor httpContextAccessor)
     {
         _context = context;
+        _httpContextAccessor = httpContextAccessor;
 
     }
     //Notificaciones clasicas
@@ -78,14 +80,18 @@ public class FcmService
               join s in _context.sessions
               on u.user_id equals s.user_id
               where w.worker_id == worker_id && u.is_active == true
-              select new { u.image_url, s.token_fcm }
+              select new { u.image_url, w.rating }
               ).FirstOrDefaultAsync();
 
         if (user == null)
             return;
 
+        var request = _httpContextAccessor.HttpContext.Request;
+        var baseUrl = $"{request.Scheme}://{request.Host}";
+        var imgs = baseUrl + worker.image_url;
 
-        await SendNotificationExpressAsync(user.token_fcm, worker.image_url, id, worker_id, username, labor_price, km_cost, title, body);
+
+        await SendNotificationExpressAsync(user.token_fcm, imgs, worker.rating, id, worker_id, username, labor_price, km_cost, title, body);
     }
     // Notificaciones de Nuevos Express hacia trabajadores
     public async Task SendNotificationByExpress(int id_category, string title, string body, Guid serviceId, Guid client_id)
@@ -114,7 +120,11 @@ public class FcmService
         if (tokens.Count == 0)
             return;
 
-        await SendNotificationsAsync(tokens, user.image_url, user.username, title, body, serviceId);
+        var request = _httpContextAccessor.HttpContext.Request;
+        var baseUrl = $"{request.Scheme}://{request.Host}";
+        var imgs = baseUrl + user.image_url;
+
+        await SendNotificationsAsync(tokens, imgs, user.username, title, body, serviceId);
     }
 
 
@@ -180,6 +190,7 @@ public class FcmService
     public async Task SendNotificationExpressAsync(
         string token,
         string img,
+        int rating,
         Guid expressid,
         Guid workerid,
         string username,
@@ -203,6 +214,7 @@ public class FcmService
                 { "type", "express" },
                 {"username" , username },
                 {"image", img },
+                {"rating",rating.ToString() },
                 { "expressid",expressid.ToString() },
                 {"workerid",workerid.ToString() },
                 {"labor_price",labor_price.ToString() },
