@@ -97,7 +97,7 @@ namespace GixtApiBackend.Infraestructure.Repositories
         {
             var request = _httpContextAccessor.HttpContext.Request;
             var baseUrl = $"{request.Scheme}://{request.Host}";
-
+           
             var result = await (
                 from e in _context.express
                 where e.is_active == true && e.express_id == id
@@ -122,7 +122,8 @@ namespace GixtApiBackend.Infraestructure.Repositories
                         where w.user_id == idworker
                         select new
                         {
-                          w.km_cost
+                          w.km_cost,
+                          w.user_id
                         }
                     ).FirstOrDefault(),
                     payment = _context.payment
@@ -166,6 +167,13 @@ namespace GixtApiBackend.Infraestructure.Repositories
 
             if (result == null)
                 return null;
+
+            if (result.job_status != "pending")
+            {
+                if (result.Worker.user_id != idworker)
+                    throw new Exception("No tienes permiso para consultar este trabajo.");
+            }
+
 
             return result;
         }
@@ -515,7 +523,10 @@ namespace GixtApiBackend.Infraestructure.Repositories
          
             if (service == null)
                 return;
-            
+
+            if (service.worker_id != null)
+                throw new Exception("Este trabajo ya fue tomado por otro trabajador.");
+
             var workerData = await (
                 from u in _context.users
                 join w in _context.workers on u.user_id equals w.user_id
@@ -547,6 +558,9 @@ namespace GixtApiBackend.Infraestructure.Repositories
 
             if (existing == null)
                 throw new Exception("Trabajo no encontrado");
+
+            if (existing.job_status == "accepted")
+                throw new Exception("Ya aceptaste este trabajo previamente.");
 
             existing.job_status = "accepted";
             existing.worker_id = worker_id;
