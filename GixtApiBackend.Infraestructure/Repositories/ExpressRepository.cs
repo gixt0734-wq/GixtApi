@@ -169,7 +169,7 @@ namespace GixtApiBackend.Infraestructure.Repositories
             if (result == null)
                 return null;
 
-            if (result.job_status == "pending")
+            if (result.job_status != "pending")
             {
                 var worker = await _context.workers.FirstOrDefaultAsync(w=> w.user_id == idworker);
                 if (result.worker_id != worker.worker_id)
