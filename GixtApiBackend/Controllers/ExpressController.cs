@@ -90,23 +90,38 @@ namespace GixtApi.Controllers
         [HttpGet("review/{id}")]
         public async Task<IActionResult> GetReviewById(Guid id, Guid idworker)
         {
+            try { 
             var job = await _getExpressReviewById.Execute(id,idworker);
 
             if (job == null)
                 return NotFound();
 
             return Ok(job);
-        }
+            }
+
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+}
 
         [HttpGet("id/{id}")]
         public async Task<IActionResult> GetById(Guid id)
         {
-            var job = await _getExpressById.Execute(id);
+            try
+            {
+                var job = await _getExpressById.Execute(id);
 
-            if (job == null)
-                return NotFound();
+                if (job == null)
+                    return NotFound();
 
-            return Ok(job);
+                return Ok(job);
+            }
+
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
         //[HttpGet("user/{id}")]
