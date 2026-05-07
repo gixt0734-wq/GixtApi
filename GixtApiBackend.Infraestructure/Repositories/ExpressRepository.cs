@@ -105,6 +105,7 @@ namespace GixtApiBackend.Infraestructure.Repositories
                 {
                     e.express_id,
                     e.client_id,
+                    e.worker_id,
                     Client = (
                         from u in _context.users
                         where u.user_id == e.client_id
@@ -168,9 +169,10 @@ namespace GixtApiBackend.Infraestructure.Repositories
             if (result == null)
                 return null;
 
-            if (result.job_status != "pending")
+            if (result.job_status == "pending")
             {
-                if (result.Worker.user_id != idworker)
+                var worker = await _context.workers.FirstOrDefaultAsync(w=> w.user_id == idworker);
+                if (result.worker_id != worker.worker_id)
                     throw new Exception("No tienes permiso para consultar este trabajo.");
             }
 
