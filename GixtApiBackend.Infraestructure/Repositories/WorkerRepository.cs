@@ -249,6 +249,7 @@ namespace GixtApi.Infraestructure.Repositories
                 };
 
                 worker.is_active = true;
+                worker.is_working = true;
                 worker.rating = 0;
 
                 var existingCliente = await _context.workers.FirstOrDefaultAsync(w => w.user_id == worker.user_id);
@@ -412,6 +413,7 @@ namespace GixtApi.Infraestructure.Repositories
                     s.gender,
                     s.birth_date,
                     s.email,
+                    w.is_working,
                     registered = FechaHelper.GetTiempoRelativo(s.created_at),
                 }
             ).FirstOrDefaultAsync();
@@ -429,7 +431,8 @@ namespace GixtApi.Infraestructure.Repositories
             var baseUrl = $"{request.Scheme}://{request.Host}";
             var result = await (
                 from w in _context.workers
-                where w.is_active == true && w.user_id == id
+                join s in _context.users on w.user_id equals s.user_id
+                where s.is_active == true && w.user_id == id
                 select new
                 {
                     w.user_id,
@@ -438,7 +441,8 @@ namespace GixtApi.Infraestructure.Repositories
                     w.longitude,
                     w.km_cost,
                     w.city,
-                    w.range_km
+                    w.range_km,
+                    w.is_working
 
                 }
             ).FirstOrDefaultAsync();
@@ -468,6 +472,7 @@ namespace GixtApi.Infraestructure.Repositories
                    u.first_name,
                    u.last_name,
                    u.gender,
+                   w.is_working,
                    registered = FechaHelper.GetTiempoRelativo(u.created_at),
                    Image = string.IsNullOrEmpty(u.image_url)
                                      ? null
@@ -517,5 +522,18 @@ namespace GixtApi.Infraestructure.Repositories
 
             return result;
         }
+
+        public async Task UpdateActiveWorker(Guid id)
+        {
+
+            var existing = await _context.workers
+                .Where(p => p.user_id == id)
+                .FirstOrDefaultAsync();
+
+            existing.is_working = !existing.is_working;
+            await _context.SaveChangesAsync();
+        }
+    
+    
     }
 }

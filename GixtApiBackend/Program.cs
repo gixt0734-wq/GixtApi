@@ -115,6 +115,7 @@ builder.Services.AddScoped<DeleteWorker>();
 builder.Services.AddScoped<GetWorkerById>();
 builder.Services.AddScoped<GetInfoWorkerById>();
 builder.Services.AddScoped<GetProfileWorker>();
+builder.Services.AddScoped<UpdateActiveWorker>();
 // =======================================================
 // ?? USE CASES - Advertisement
 // =======================================================
@@ -191,6 +192,7 @@ builder.Services.AddScoped<GetExpressById>();
 builder.Services.AddScoped<GetExpressByWorkerId>();
 builder.Services.AddScoped<AceptDiagnosticExp>();
 builder.Services.AddScoped<FinishExpress>();
+builder.Services.AddScoped<SendAlertExpress>();
 //builder.Services.AddScoped<GetExpressWorkerById>();
 
 // =======================================================
@@ -281,7 +283,7 @@ builder.Services.AddCors(options =>
 var firebasePath = Path.Combine(
     builder.Environment.ContentRootPath,
     "Firebase",
-    "gixt-bcfdc-firebase-adminsdk-fbsvc-dbc0faaa5e.json"
+    "gixt-133e4-firebase-adminsdk-fbsvc-da1b389080.json"
 );
 
 FirebaseApp.Create(new AppOptions()

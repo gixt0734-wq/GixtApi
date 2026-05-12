@@ -46,7 +46,7 @@ public class FcmService
               join u in _context.users on w.user_id equals u.user_id
               join s in _context.sessions
               on u.user_id equals s.user_id
-              where w.worker_id == id && u.is_active == true
+              where w.worker_id == id && u.is_active == true && w.is_working == true
               select s.token_fcm
               ).FirstOrDefaultAsync();
 

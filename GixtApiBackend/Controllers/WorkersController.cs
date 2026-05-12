@@ -20,7 +20,7 @@ namespace GixtApiBackend.Controllers
         private readonly GetWorkerById _getWorkerById;
         private readonly GetInfoWorkerById _getInfoWorkerById;
         private readonly GetProfileWorker _getProfileWorker;
-
+        private readonly UpdateActiveWorker _updateActiveWorker;
         public WorkersController(
             CreateWorker createWorker,
             CreateInfoWorker createInfoWorker,
@@ -30,7 +30,8 @@ namespace GixtApiBackend.Controllers
             DeleteWorker deleteWorker,
             GetWorkerById getWorkerById,
             UpdateInfoWorker updateInfoWorker,
-            GetProfileWorker getProfileWorker
+            GetProfileWorker getProfileWorker,
+            UpdateActiveWorker updateActiveWorker
 
         )
         {
@@ -43,6 +44,7 @@ namespace GixtApiBackend.Controllers
             _getWorkerById = getWorkerById;
             _updateInfoWorker = updateInfoWorker;
             _getProfileWorker = getProfileWorker;
+            _updateActiveWorker = updateActiveWorker;
 
         }
 
@@ -127,10 +129,23 @@ namespace GixtApiBackend.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Put([FromForm] UserUpdateDTO dto)
         {
-
-
             await _updateWorker.Execute(dto);
             return Ok(new { message = "Worker updated successfully" });
+        }
+
+        [HttpPatch("working")]
+        public async Task<IActionResult> PutActive (Guid id)
+        {
+            try
+            {
+                await _updateActiveWorker.Execute(id);
+                return Ok(new { message = "Worker updated successfully" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+
         }
 
         [HttpPut("info")]

@@ -24,6 +24,7 @@ namespace GixtApi.Controllers
         private readonly AcceptExpress _acceptExpress;
         private readonly AceptDiagnosticExp _aceptDiagnosticExp;
         private readonly FinishExpress _finishExpress;
+        private readonly SendAlertExpress _sendAlertExpress;
         //private readonly GetExpressWorkerById _getExpressWorkerById;
 
         public ExpresssController(
@@ -39,7 +40,8 @@ namespace GixtApi.Controllers
             AcceptExpress acceptExpress,
             GetExpressReviewById getExpressReviewById,
             AceptDiagnosticExp aceptDiagnosticExp,
-            FinishExpress finishExpress
+            FinishExpress finishExpress,
+            SendAlertExpress sendAlertExpress
         //GetExpressWorkerById getExpressWorkerById
         )
         {
@@ -56,6 +58,7 @@ namespace GixtApi.Controllers
             _acceptExpress = acceptExpress;
             _aceptDiagnosticExp = aceptDiagnosticExp;
             _finishExpress = finishExpress;
+            _sendAlertExpress = sendAlertExpress;
             //_getExpressWorkerById = getExpressWorkerById;
         }
 
@@ -236,7 +239,23 @@ namespace GixtApi.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
-        
+
+        [HttpPost("SendAlert")]
+        public async Task<IActionResult> SendAlert(Guid id)
+        {
+            try
+            {
+
+                await _sendAlertExpress.Execute( id);
+                return Ok(new { message = "Send successfully" });
+            }
+
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)

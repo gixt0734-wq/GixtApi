@@ -1,14 +1,15 @@
-﻿using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Http;
-using System.IO;
-using GixtApiBackend.Infraestructure;
-using GixtApiBackend.Application.Interfaces;
+﻿using FirebaseAdmin.Messaging;
 using GixtApiBackend.Application.DTos;
+using GixtApiBackend.Application.Interfaces;
 using GixtApiBackend.Domain.Entities;
 using GixtApiBackend.Infraestructure;
+using GixtApiBackend.Infraestructure;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
-using FirebaseAdmin.Messaging;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using System.IO;
+using System.Threading.Tasks;
 
 
 namespace GixtApiBackend.Infraestructure.Repositories
@@ -82,6 +83,30 @@ namespace GixtApiBackend.Infraestructure.Repositories
                    job.client_id
                );
             return job.express_id;
+        }
+
+        public async Task SendAlertExpress(Guid user_id)
+        {
+
+            var existing = await _context.express
+                .FirstOrDefaultAsync(p =>
+                    p.client_id == user_id &&
+                    p.job_status == "pending" &&
+                    p.is_active == true
+                );
+
+            if (existing == null)
+            {
+                throw new Exception("Este trabajo no se encuentra");
+            }
+            await _fcmService.SendNotificationByExpress(
+                   existing.category_id,
+                   "Alguien necesita tu ayuda",
+                   "Tienes un nuevo servicio express, verificalo",
+                   existing.express_id,
+                   existing.client_id
+               );
+
         }
 
         public async Task<IEnumerable<Express>> GetAllExpresssAsync()

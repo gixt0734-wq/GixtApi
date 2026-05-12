@@ -17,7 +17,8 @@ namespace GixtApiBackend.Application.Interfaces
         Task UpdateWorkerAsync(UserUpdateDTO dto);
         Task UpdateInfoWorkerAsync(WorkerDTO dto);
         Task DeleteWorkerAsync(Guid id);
-        Task<IEnumerable<User>> GetAllWorkersAsync();
+        Task UpdateActiveWorker(Guid id);
+        Task <IEnumerable<User>> GetAllWorkersAsync();
         Task<object> GetWorkerByIdAsync(Guid id);
         Task<object> GetInfoWorkerByIdAsync(Guid id);
         Task<object> GetProfileWorker(Guid id);
