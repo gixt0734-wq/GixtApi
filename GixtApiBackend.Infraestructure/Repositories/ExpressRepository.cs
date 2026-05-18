@@ -251,6 +251,11 @@ namespace GixtApiBackend.Infraestructure.Repositories
                         .Where(c => c.job_id == e.express_id)
                         .Select(c => baseUrl + c.image_url)
                         .ToList(),
+                    Review = _context.reviews
+                    .Any(f =>
+                        f.job_id == e.express_id &&
+                        f.is_active == true
+                    ),
 
                     e.job_date,
                     e.job_time,
