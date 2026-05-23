@@ -106,6 +106,7 @@ public class FcmService
                   && w.is_active == true
                   && u.is_active == true
                   && ses.token_fcm != null
+                  && w.is_working == true
             select ses.token_fcm
         )
         .Distinct()

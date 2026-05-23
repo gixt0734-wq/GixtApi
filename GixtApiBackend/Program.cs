@@ -284,7 +284,7 @@ builder.Services.AddCors(options =>
 var firebasePath = Path.Combine(
     builder.Environment.ContentRootPath,
     "Firebase",
-    "gixt-133e4-firebase-adminsdk-fbsvc-da1b389080.json"
+    "gixt-9af7f-firebase-adminsdk-fbsvc-9fb72e9c01.json"
 );
 
 FirebaseApp.Create(new AppOptions()
