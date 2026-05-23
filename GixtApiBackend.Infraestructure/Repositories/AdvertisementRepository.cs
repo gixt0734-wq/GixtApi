@@ -1,22 +1,25 @@
-﻿using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Http;
-using GixtApiBackend.Infraestructure;
+﻿using GixtApiBackend.Application.DTos;
 using GixtApiBackend.Application.Interfaces;
-using GixtApiBackend.Application.DTos;
 using GixtApiBackend.Domain.Entities;
+using GixtApiBackend.Infraestructure;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using System.Threading.Tasks;
 
 
 namespace GixtApi.Infraestructure.Repositories
 {
     public class AdvertisementRepository : IAdvertisementRepository
     {
+        private readonly string _basePath;
         private readonly AppDbContext _context;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public AdvertisementRepository(AppDbContext context, IHttpContextAccessor httpContextAccessor)
+        public AdvertisementRepository(AppDbContext context, IHttpContextAccessor httpContextAccessor, IConfiguration config)
         {
             _context = context;
+            _basePath = config["ImageStorage:BasePath"];
             _httpContextAccessor = httpContextAccessor;
         }
 
@@ -28,8 +31,7 @@ namespace GixtApi.Infraestructure.Repositories
 
             if (dto.image != null && dto.image.Length > 0)
             {
-                var folder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/advertisements");
-
+                var folder = Path.Combine(_basePath, "advertisements");
                 if (!Directory.Exists(folder))
                     Directory.CreateDirectory(folder);
 

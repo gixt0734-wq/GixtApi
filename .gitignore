@@ -363,4 +363,8 @@ MigrationBackup/
 FodyWeavers.xsd
 
 wwwroot/
-firebase
+Firebase/
+GixtApiBackend/appsettings.json
+GixtApiBackend/log.txt
+GixtApiBackend/gixt-9af7f-firebase-adminsdk-fbsvc-9fb72e9c01.json
+GixtApiBackend/FETCH_HEAD
