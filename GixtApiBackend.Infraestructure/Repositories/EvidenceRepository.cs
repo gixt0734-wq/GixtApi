@@ -41,26 +41,18 @@ namespace GixtApiBackend.Infraestructure.Repositories
             if (dto.images == null || dto.images.Count == 0)
                 return;
 
-            var additionalFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/img_evidences");
-
-
-            if (!Directory.Exists(additionalFolder))
-                Directory.CreateDirectory(additionalFolder);
-
             var evidencesToAdd = new List<Evidence>();
 
             foreach (var e in dto.images)
             {
                 if (e == null)
                     continue;
-                var fileName = $"{Guid.NewGuid()}.webp";
-                var imagePath = Path.Combine(additionalFolder, fileName);
 
-                await _imageService.SaveOptimizedImageAsync(e, imagePath);
+               var img = await _imageService.SaveImageAsync(e, "img_evidences");
 
                 evidencesToAdd.Add( new Evidence
                 {
-                    image_url = "/img/img_evidences/" + fileName,
+                    image_url = img,
                     job_id = dto.job_id
 
                 });

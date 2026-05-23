@@ -49,16 +49,9 @@ namespace GixtApiBackend.Infraestructure.Repositories
          
             if (dto.image != null && dto.image.Length > 0)
             {
-                var folder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/jobs_express/");
-                if (!Directory.Exists(folder))
-                    Directory.CreateDirectory(folder);
+                var img = await _imageService.SaveImageAsync(dto.image, "jobs_express");
 
-                var fileName = $"{Guid.NewGuid()}.webp";
-                var fullPath = Path.Combine(folder, fileName);
-
-                await _imageService.SaveOptimizedImageAsync(dto.image, fullPath);
-
-                job.image_url = "/img/jobs_express/" + fileName;
+                job.image_url = img;
             }
 
             

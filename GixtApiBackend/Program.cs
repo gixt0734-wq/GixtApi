@@ -1,27 +1,28 @@
-﻿using System.Text;
-using FirebaseAdmin;
+﻿using FirebaseAdmin;
+using GixtApi.Infraestructure.Repositories;
+using GixtApiBackend.Application.Interfaces;
+using GixtApiBackend.Application.UseCases.Advertisements;
+using GixtApiBackend.Application.UseCases.Categories;
+using GixtApiBackend.Application.UseCases.Evidence;
+using GixtApiBackend.Application.UseCases.Expresss;
+using GixtApiBackend.Application.UseCases.Favorites;
+using GixtApiBackend.Application.UseCases.Jobs;
+using GixtApiBackend.Application.UseCases.Locations;
+using GixtApiBackend.Application.UseCases.Paymentss;
+using GixtApiBackend.Application.UseCases.Review;
+using GixtApiBackend.Application.UseCases.Services;
+using GixtApiBackend.Application.UseCases.Users;
+using GixtApiBackend.Application.UseCases.Workers;
 using GixtApiBackend.Infraestructure;
+using GixtApiBackend.Infraestructure.Repositories;
 using Google.Apis.Auth.OAuth2;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Microsoft.Extensions.DependencyInjection;
-using GixtApiBackend.Application.Interfaces;
-using GixtApiBackend.Application.UseCases.Users;
-using GixtApiBackend.Application.UseCases.Workers;
-using GixtApi.Infraestructure.Repositories;
-using GixtApiBackend.Application.UseCases.Advertisements;
-using GixtApiBackend.Application.UseCases.Categories;
-using GixtApiBackend.Application.UseCases.Services;
-using GixtApiBackend.Application.UseCases.Favorites;
-using GixtApiBackend.Application.UseCases.Locations;
-using GixtApiBackend.Application.UseCases.Expresss;
-using GixtApiBackend.Application.UseCases.Jobs;
-using GixtApiBackend.Application.UseCases.Evidence;
-using GixtApiBackend.Application.UseCases.Paymentss;
-using GixtApiBackend.Application.UseCases.Review;
-using GixtApiBackend.Infraestructure.Repositories;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -292,7 +293,19 @@ FirebaseApp.Create(new AppOptions()
 });
 
 
+// =======================================================
+// ?? Firebase
+// =======================================================
 var app = builder.Build();
+
+//app.UseStaticFiles(); // Para wwwroot (si aún lo usas)
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(Directory.GetCurrentDirectory(), "PrivateImages")),
+    RequestPath = "/private-images"
+});
 
 // =======================================================
 // ?? MIDDLEWARE PIPELINE (ORDEN CORRECTO)

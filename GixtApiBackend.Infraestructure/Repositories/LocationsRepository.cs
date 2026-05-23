@@ -15,11 +15,13 @@ namespace GixtApiBackend.Infraestructure.Repositories
     {
         private readonly AppDbContext _context;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ImageService _imageService;
 
-        public LocationRepository(AppDbContext context, IHttpContextAccessor httpContextAccessor)
+        public LocationRepository(AppDbContext context, IHttpContextAccessor httpContextAccessor, ImageService imageService)
         {
             _context = context;
             _httpContextAccessor = httpContextAccessor;
+            _imageService = imageService;
         }
 
         public async Task CreateLocationAsync(LocationDTO dto)
@@ -43,20 +45,8 @@ namespace GixtApiBackend.Infraestructure.Repositories
 
             if (dto.image != null && dto.image.Length > 0)
             {
-                var folder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/location");
-
-                if (!Directory.Exists(folder))
-                    Directory.CreateDirectory(folder);
-
-                var fileName = $"{Guid.NewGuid()}{Path.GetExtension(dto.image.FileName)}";
-                var fullPath = Path.Combine(folder, fileName);
-
-                using (var stream = new FileStream(fullPath, FileMode.Create))
-                {
-                    await dto.image.CopyToAsync(stream);
-                }
-
-                location.image_url = "/img/location/" + fileName;
+                var img = await _imageService.SaveImageAsync(dto.image, "location");
+                location.image_url = img;
             }
 
             await _context.locations.AddAsync(location);
