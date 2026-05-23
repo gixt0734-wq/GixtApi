@@ -287,6 +287,7 @@ var firebasePath = Path.Combine(
     "gixt-9af7f-firebase-adminsdk-fbsvc-9fb72e9c01.json"
 );
 
+
 FirebaseApp.Create(new AppOptions()
 {
     Credential = GoogleCredential.FromFile(firebasePath)
@@ -294,16 +295,18 @@ FirebaseApp.Create(new AppOptions()
 
 
 // =======================================================
-// ?? Firebase
+// ?? Images
 // =======================================================
 var app = builder.Build();
 
 //app.UseStaticFiles(); // Para wwwroot (si aún lo usas)
 
+var imagesPath = builder.Configuration["ImageStorage:BasePath"];
+Directory.CreateDirectory(imagesPath);
+
 app.UseStaticFiles(new StaticFileOptions
 {
-    FileProvider = new PhysicalFileProvider(
-        Path.Combine(Directory.GetCurrentDirectory(), "PrivateImages")),
+    FileProvider = new PhysicalFileProvider(imagesPath),
     RequestPath = "/private-images"
 });
 
