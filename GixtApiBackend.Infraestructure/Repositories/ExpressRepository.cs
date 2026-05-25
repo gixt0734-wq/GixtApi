@@ -694,7 +694,7 @@ namespace GixtApiBackend.Infraestructure.Repositories
                     workerData.WorkerId,
                     $"{workerData.Username} a enviado una propuesta.",
                     $"{workerData.Username} realiza el trabajo por: {labor_price} y por diagnostico ${km_cost}",
-                    labor_price, km_cost
+                     km_cost,labor_price
                 );
             }
             catch (Exception)
